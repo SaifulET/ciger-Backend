@@ -13,6 +13,9 @@ import http from "http";
 import { userInfo } from "os";
 import authRoutes from "./routes/auth.Route.js";
 import ProuductRouter from "./routes/product.Route.js";
+import brandRoute from "./routes/brandRoutes.js";
+import blogRoute from "./routes/blog.route.js";
+import reviewRoute from "./routes/review.Route.js";
 ;
 
 dotenv.config();
@@ -51,6 +54,9 @@ app.use(helmet());
 // Routes placeholder
 app.use("/auth",authRoutes)
 app.use("/product",ProuductRouter)
+app.use("/brand",brandRoute)
+app.use("/blog",blogRoute);
+app.use("/review",reviewRoute)
 
 
 // MongoDB Connection

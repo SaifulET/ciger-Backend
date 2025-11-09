@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   discount: { type: Number, default: 0 },
   averageRating: { type: Number, default: 0 },
-  available: { type: Boolean, default: true },
+  available: { type: Number, default: 0 },
   isBest: { type: Boolean, default: false },
   isNew: { type: Boolean, default: false },
   isInStock: { type: Boolean, default: true },
@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
   subCategory: { type: String },
   colors: [{ type: String }],
   description: { type: String },
-  reviewIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }], 
+  
 }, { timestamps: true });
 
 export default mongoose.model("Product", productSchema);
