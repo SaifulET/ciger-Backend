@@ -16,6 +16,10 @@ import ProuductRouter from "./routes/product.Route.js";
 import brandRoute from "./routes/brandRoutes.js";
 import blogRoute from "./routes/blog.route.js";
 import reviewRoute from "./routes/review.Route.js";
+import cartRoute from "./routes/cart.Route.js";
+import discountRouter from "./routes/discount.Route.js";
+import ServicePricingRouter from "./routes/servicePricing.Route.js";
+import carouselRouter from "./routes/carousel.route.js";
 ;
 
 dotenv.config();
@@ -57,6 +61,10 @@ app.use("/product",ProuductRouter)
 app.use("/brand",brandRoute)
 app.use("/blog",blogRoute);
 app.use("/review",reviewRoute)
+app.use("/cart",cartRoute)
+app.use("/discount",discountRouter)
+app.use("/servicePricing",ServicePricingRouter)
+app.use("/carousel",carouselRouter)
 
 
 // MongoDB Connection
