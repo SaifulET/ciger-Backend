@@ -20,6 +20,8 @@ import cartRoute from "./routes/cart.Route.js";
 import discountRouter from "./routes/discount.Route.js";
 import ServicePricingRouter from "./routes/servicePricing.Route.js";
 import carouselRouter from "./routes/carousel.route.js";
+import orderRouter from "./routes/order.Route.js";
+import categoryPaymentRouter from "./routes/categoryPayment.route.js";
 ;
 
 dotenv.config();
@@ -65,6 +67,8 @@ app.use("/cart",cartRoute)
 app.use("/discount",discountRouter)
 app.use("/servicePricing",ServicePricingRouter)
 app.use("/carousel",carouselRouter)
+app.use("/order",orderRouter)
+app.use("/categoryPayment",categoryPaymentRouter)
 
 
 // MongoDB Connection
