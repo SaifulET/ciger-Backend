@@ -1,5 +1,5 @@
 import Order from "../models/order.js";
-import Cart from "../models/Cart.js";
+import Cart from "../models/cart.js";
 import { createNotification } from "./notification.service.js";
 
 // 🧮 Helper: generate next orderId (#10000 -> #10001 -> ...)
