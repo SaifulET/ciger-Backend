@@ -57,6 +57,15 @@ export const getNotificationsByUser = async (userId) => {
   return notifications.map(formatNotification);
 };
 
+
+export const getAllNotifications = async () => {
+  const notifications = await Notification.find()
+    .sort({ createdAt: -1 })
+    .limit(20);
+
+  return notifications.map(formatNotification);
+};
+
 // Helper: format like your example
 const formatNotification = (n) => ({
   id: n._id,

@@ -1,9 +1,11 @@
 import express from "express";
 import {
   createNotification,
+  getAllNotificationsController,
   getUserNotifications,
 } from "../controllers/notification.controller.js";
 import { authCheck } from "../middlewares/auth.middleware.js";
+import {authChecks} from "../middlewares/authForAdmin.middleware.js"
 
 
 const notificationRoute = express.Router();
@@ -13,5 +15,8 @@ notificationRoute.post("/createNotification", authCheck,createNotification);
 
 // GET all notifications of a user
 notificationRoute.get("/getNotifications/:userId",authCheck,  getUserNotifications);
+
+notificationRoute.get("/getAllNotifications",authChecks,  getAllNotificationsController);
+
 
 export default notificationRoute;

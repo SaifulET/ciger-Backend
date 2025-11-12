@@ -20,3 +20,13 @@ export const getUserNotifications = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
+
+export const getAllNotificationsController = async (req, res) => {
+  try {
+    const notifications = await notificationService.getAllNotifications();
+    res.status(200).json({ success: true, data: notifications });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
