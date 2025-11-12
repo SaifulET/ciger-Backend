@@ -3,7 +3,11 @@ import * as brandService from "../services/brandService.js";
 // Create brand
 export const createBrand = async (req, res) => {
   try {
-    const brand = await brandService.createBrand(req.body);
+     const data = req.body
+    if(req.file){
+      data.image=data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+    }
+    const brand = await brandService.createBrand(data);
     res.status(201).json({ success: true, data: brand });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -23,7 +27,11 @@ export const getAllBrands = async (req, res) => {
 // Update brand
 export const updateBrand = async (req, res) => {
   try {
-    const brand = await brandService.updateBrand(req.params.id, req.body);
+     const data = req.body
+    if(req.file){
+      data.image=data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+    }
+    const brand = await brandService.updateBrand(req.params.id, data);
     if (!brand) return res.status(404).json({ success: false, message: "Brand not found" });
     res.status(200).json({ success: true, data: brand });
   } catch (err) {

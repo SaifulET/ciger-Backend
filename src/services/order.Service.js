@@ -1,5 +1,6 @@
 import Order from "../models/order.js";
 import Cart from "../models/Cart.js";
+import { createNotification } from "./notification.service.js";
 
 // 🧮 Helper: generate next orderId (#10000 -> #10001 -> ...)
 export const generateNextOrderId = async () => {
@@ -32,6 +33,10 @@ export const createOrder = async (userId, orderData) => {
   });
 
   await newOrder.save();
+  const status="placed"
+  const order=orderId.toString()
+  const data = {userId,  order,status};
+  await createNotification(data)
 
   // ✅ Delete selected cart items after order created
   await Cart.deleteMany({ userId, isSelected: true });

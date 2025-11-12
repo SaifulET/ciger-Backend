@@ -22,6 +22,9 @@ import ServicePricingRouter from "./routes/servicePricing.Route.js";
 import carouselRouter from "./routes/carousel.route.js";
 import orderRouter from "./routes/order.Route.js";
 import categoryPaymentRouter from "./routes/categoryPayment.route.js";
+import ProfileRoute from "./routes/user.Route.js";
+import notificationRoute from "./routes/notification.route.js";
+import adminRoutes from "./routes/admin.Route.js";
 ;
 
 dotenv.config();
@@ -59,6 +62,7 @@ app.use(helmet());
 
 // Routes placeholder
 app.use("/auth",authRoutes)
+app.use("/admin",adminRoutes)
 app.use("/product",ProuductRouter)
 app.use("/brand",brandRoute)
 app.use("/blog",blogRoute);
@@ -69,6 +73,8 @@ app.use("/servicePricing",ServicePricingRouter)
 app.use("/carousel",carouselRouter)
 app.use("/order",orderRouter)
 app.use("/categoryPayment",categoryPaymentRouter)
+app.use("/profile",ProfileRoute)
+app.use("/notification",notificationRoute)
 
 
 // MongoDB Connection

@@ -42,3 +42,25 @@ export const getCategoryPaymentsMonthYearController = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
+
+
+export const getCategoryPaymentsDetailedSummary = async (req, res) => {
+  try {
+    const summary = await categoryPaymentService.getCategoryPaymentsDetailedSummary();
+    res.status(200).json({ success: true, summary });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+
+
+export const getYearlyMonthwisePaymentSummary = async (req, res) => {
+  try {
+    const summary = await categoryPaymentService.getYearlyMonthwisePaymentSummary();
+    res.status(200).json({ success: true, data: summary });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};

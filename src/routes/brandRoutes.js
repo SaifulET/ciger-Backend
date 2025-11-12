@@ -5,17 +5,18 @@ import {
   updateBrand,
   deleteBrand
 } from "../controllers/brandController.js";
+import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
 const brandRoute = express.Router();
 
 // Create new brand
-brandRoute.post("/createBrand", createBrand);
+brandRoute.post("/createBrand",SingleuploadMiddleware, createBrand);
 
 // Get all brands
 brandRoute.get("/getAllBrands", getAllBrands);
 
 // Update brand
-brandRoute.put("/updateBrand/:id", updateBrand);
+brandRoute.put("/updateBrand/:id",SingleuploadMiddleware, updateBrand);
 
 // Delete brand
 brandRoute.delete("/deleteBrand/:id", deleteBrand);

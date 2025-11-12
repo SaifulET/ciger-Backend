@@ -6,11 +6,12 @@ import {
   updateProduct,
   deleteProduct
 } from "../controllers/productController.js";
+import { uploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
 const ProuductRouter = express.Router();
 
 // Create product
-ProuductRouter.post("/createProduct", createProduct);
+ProuductRouter.post("/createProduct",uploadMiddleware.array("images", 10), createProduct);
 
 // Get all products
 ProuductRouter.get("/getAllProduct", getProducts);
@@ -19,7 +20,7 @@ ProuductRouter.get("/getAllProduct", getProducts);
 ProuductRouter.get("/getProductById/:id", getProductById);
 
 // Update product
-ProuductRouter.put("/updateProductById/:id", updateProduct);
+ProuductRouter.put("/updateProductById/:id",uploadMiddleware.array("images", 10), updateProduct);
 
 // Delete product
 ProuductRouter.delete("/deleteProductById/:id", deleteProduct);

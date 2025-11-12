@@ -14,7 +14,7 @@ export const authChecks=async (req,res,next)=>{
 
 
  let decoded=TokenDecodeForAdmin(token);
-  
+
     if(decoded===null){
         res.status(401).json({status:"fail",Message:"Unauthorized",token:token});
     }

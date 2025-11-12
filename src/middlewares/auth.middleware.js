@@ -20,6 +20,7 @@ export const authCheck=async (req,res,next)=>{
     }
     else{
         let user_id=decoded.id;
+        
         req.headers.user_id=user_id;
         next();
     }

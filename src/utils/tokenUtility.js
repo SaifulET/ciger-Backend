@@ -30,12 +30,11 @@ export const TokenEncodeForAdmin=(email,user_id)=>{
 
 
 export const TokenDecodeForAdmin=(token)=>{
-    try{
-        console.log(token ,"from decode")
-        const KEY=JWT_KEY_ADMIN;
+    try{ 
+        const KEY=JWT_KEY_ADMIN; 
         return jwt.verify(token,KEY)
     }
-    catch{
+    catch(e){
         return null;
     }
 

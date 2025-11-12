@@ -6,11 +6,12 @@ import {
   updateBlog,
   deleteBlog
 } from "../controllers/blog.controller.js";
+import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
 const blogRoute = express.Router();
 
 // Create new blog
-blogRoute.post("/createBlog", createBlog);
+blogRoute.post("/createBlog",SingleuploadMiddleware, createBlog);
 
 // Get all blogs
 blogRoute.get("/getAllBlogs", getAllBlogs);
@@ -19,7 +20,7 @@ blogRoute.get("/getAllBlogs", getAllBlogs);
 blogRoute.get("/getBlogById/:id", getBlogById);
 
 // Update blog
-blogRoute.put("/updateBlog/:id", updateBlog);
+blogRoute.put("/updateBlog/:id",SingleuploadMiddleware, updateBlog);
 
 // Delete blog
 blogRoute.delete("/deleteBlog/:id", deleteBlog);

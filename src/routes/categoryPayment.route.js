@@ -2,7 +2,9 @@ import express from "express";
 import {
   createOrUpdateCategoryPayment,
   getAllCategoryPayments,
-  getCategoryPaymentsMonthYearController 
+  getCategoryPaymentsMonthYearController,
+  getCategoryPaymentsDetailedSummary ,
+  getYearlyMonthwisePaymentSummary
 } from "../controllers/categoryPayment.controller.js";
 
 const categoryPaymentRouter = express.Router();
@@ -16,4 +18,12 @@ categoryPaymentRouter.get("/getAllCategoryPayment", getAllCategoryPayments);
 // GET /api/category-payment/calculate?month=11&year=2025 → calculate from orders
 categoryPaymentRouter.get("/calculateTotalCategoryPayment", getCategoryPaymentsMonthYearController );
 
+
+
+categoryPaymentRouter.get("/detailed-summary", getCategoryPaymentsDetailedSummary);
+
+
+
+
+categoryPaymentRouter.get("/yearly-summary", getYearlyMonthwisePaymentSummary);
 export default categoryPaymentRouter;
