@@ -36,7 +36,8 @@ const io = initSocket(server);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://ciger-backend-2.onrender.com"
+  "http://localhost:3000"
+  
   
   
 ];
