@@ -9,7 +9,7 @@ import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
 export const signup = async (data) => {
-  const { email, password, confirmPassword } = data;
+  const { email, password, firstName,lastName } = data;
 
   // Check for existing user first
   const existingUser = await User.findOne({ email });
@@ -17,9 +17,9 @@ export const signup = async (data) => {
   if (existingUser) {
     throw new Error("User already exists with this email");
   }
-  if (password !== confirmPassword) {
-    throw new Error("Password and confirmPassword isn't same");
-  }
+  // if (password !== confirmPassword) {
+  //   throw new Error("Password and confirmPassword isn't same");
+  // }
 
   if (password.length < 6) {
     throw new Error("password must be alteast 6 characters");
@@ -31,6 +31,7 @@ export const signup = async (data) => {
     const user = new User({
       email,
       password: hashedPassword,
+      
     });
 
     const token = jwt.sign({ id: user._id }, JWT_KEY, {
