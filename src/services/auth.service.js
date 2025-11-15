@@ -114,10 +114,12 @@ export const verifyOtpService = async (email, otp) => {
 
   if (!user) throw new Error("User not found");
 
-  if (!user.otp || !user.otpExpires) throw new Error("OTP not requested");
 
-  if (user.otp !== otp) throw new Error("Invalid OTP");
-  if (user.otpExpires < Date.now()) throw new Error("OTP expired");
+  if (!user.otp || !user.otpExpires) throw new Error("OTP not requested");
+    
+
+  if (user.otp !== otp) return { message: "OTP InValid" };
+  if (user.otpExpires < Date.now())  return { message:"OTP expired" };
 
   // ✅ OTP valid → clear OTP
   user.otp = null;
