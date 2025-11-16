@@ -36,9 +36,12 @@ export const getAllProducts = async (filters = {}) => {
   }
 
   // ✅ Filter by feature (best/new)
-  if (filters.feature) {
-    if (filters.feature === "best") query.isBest = true;
-    if (filters.feature === "new") query.isNew = true;
+  if (filters.isBest) {
+   query.isBest = true;
+  }
+  // ✅ Filter by feature (best/new)
+  if (filters.isNew) {
+   query.isNew = true;
   }
 
   // ✅ Filter by category

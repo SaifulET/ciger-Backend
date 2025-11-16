@@ -24,10 +24,11 @@ export const getProducts = async (req, res) => {
 
     const filters = {
       brandId: req.query.brandId,
-      feature: req.query.feature,
       category: req.query.category,
       subCategory: req.query.subCategory,
-      discount: req.query.discount, 
+      discount: req.query.discount,
+      isBest:req.query.best,
+      isNew:req.query.new 
     };
 console.log(filters)
     const products = await productService.getAllProducts(filters);

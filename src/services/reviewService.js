@@ -9,7 +9,7 @@ export const createReview = async (data) => {
 // ✅ Get all reviews or filter by productId
 export const getAllReviews = async (filter = {}) => {
   return await Review.find(filter)
-    .populate("userId", "name email")
+    .populate("userId", "name email location ")
     .populate("productId", "name title")
     .sort({ createdAt: -1 });
 };
