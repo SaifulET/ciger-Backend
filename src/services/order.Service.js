@@ -96,8 +96,9 @@ export const getOrdersByUser = async (userId) => {
       populate: { path: "productId", model: "Product" },
     })
     .sort({ createdAt: -1 });
+    console.log(userId,orders,'abcdf')
 
-  if (!orders.length) throw new Error("No orders found for this user");
+  if (!orders.length) return ("No orders found for this user");
 
   return orders;
 };

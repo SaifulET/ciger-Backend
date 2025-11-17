@@ -2,11 +2,12 @@ import Cart from "../models/cart.js";
 
 // ✅ Create or add to cart
 export const createCart = async (data) => {
+  console.log(data,"hellow")
   const existing = await Cart.findOne({
     userId: data.userId,
     productId: data.productId,
   });
-
+console.log(existing)
   if (existing) {
     existing.quantity += data.quantity || 1;
     return await existing.save();

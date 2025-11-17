@@ -3,6 +3,7 @@ import * as cartService from "../services/cart.service.js";
 // ✅ Create cart
 export const createCart = async (req, res) => {
   try {
+    // console.log(typeof  JSON.parse(req.body),"kdkdkd");
     const cart = await cartService.createCart(req.body);
     res.status(201).json({ success: true, data: cart });
   } catch (err) {
@@ -14,6 +15,7 @@ export const createCart = async (req, res) => {
 export const getUserCart = async (req, res) => {
   try {
     const { userId } = req.params;
+    
     const cart = await cartService.getUserCart(userId);
     res.status(200).json({ success: true, count: cart.length, data: cart });
   } catch (err) {

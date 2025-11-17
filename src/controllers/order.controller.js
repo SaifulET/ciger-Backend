@@ -53,7 +53,7 @@ export const updateOrderById = async (req, res) => {
 export const getOrdersByUser = async (req, res) => {
   try {
     const userId = req.params.userId || req.user?._id;
-
+console.log(userId)
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -62,11 +62,13 @@ export const getOrdersByUser = async (req, res) => {
     }
 
     const orders = await orderService.getOrdersByUser(userId);
+    console.log(orders)
     res.status(200).json({
       success: true,
       data: orders,
     });
   } catch (err) {
+    console.log(err)
     res.status(404).json({
       success: false,
       message: err.message,

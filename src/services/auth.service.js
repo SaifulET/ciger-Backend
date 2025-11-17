@@ -57,7 +57,7 @@ export const signin = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) throw new Error("User not found");
-  if(user.isSignin) throw new Error("Already Logedin")
+ 
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid password");
