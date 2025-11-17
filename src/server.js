@@ -25,8 +25,6 @@ import categoryPaymentRouter from "./routes/categoryPayment.route.js";
 import ProfileRoute from "./routes/user.Route.js";
 import notificationRoute from "./routes/notification.route.js";
 import adminRoutes from "./routes/admin.Route.js";
-;
-
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -36,22 +34,22 @@ const io = initSocket(server);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000"
-  
-  
-  
+  "http://localhost:3000",
+  "https://ciger-frontend.vercel.app/",
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // allow the request
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // allow the request
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -59,24 +57,21 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet());
 
-
-
 // Routes placeholder
-app.use("/auth",authRoutes)
-app.use("/admin",adminRoutes)
-app.use("/product",ProuductRouter)
-app.use("/brand",brandRoute)
-app.use("/blog",blogRoute);
-app.use("/review",reviewRoute)
-app.use("/cart",cartRoute)
-app.use("/discount",discountRouter)
-app.use("/servicePricing",ServicePricingRouter)
-app.use("/carousel",carouselRouter)
-app.use("/order",orderRouter)
-app.use("/categoryPayment",categoryPaymentRouter)
-app.use("/profile",ProfileRoute)
-app.use("/notification",notificationRoute)
-
+app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
+app.use("/product", ProuductRouter);
+app.use("/brand", brandRoute);
+app.use("/blog", blogRoute);
+app.use("/review", reviewRoute);
+app.use("/cart", cartRoute);
+app.use("/discount", discountRouter);
+app.use("/servicePricing", ServicePricingRouter);
+app.use("/carousel", carouselRouter);
+app.use("/order", orderRouter);
+app.use("/categoryPayment", categoryPaymentRouter);
+app.use("/profile", ProfileRoute);
+app.use("/notification", notificationRoute);
 
 // MongoDB Connection
 mongoose
