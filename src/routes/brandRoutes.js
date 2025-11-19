@@ -3,7 +3,8 @@ import {
   createBrand,
   getAllBrands,
   updateBrand,
-  deleteBrand
+  deleteBrand,
+  getBrandById
 } from "../controllers/brandController.js";
 import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
@@ -20,5 +21,8 @@ brandRoute.put("/updateBrand/:id",SingleuploadMiddleware, updateBrand);
 
 // Delete brand
 brandRoute.delete("/deleteBrand/:id", deleteBrand);
+
+
+brandRoute.get("/getBrandById/:id", getBrandById);
 
 export default brandRoute;

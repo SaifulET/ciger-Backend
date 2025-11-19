@@ -4,6 +4,7 @@ import * as brandService from "../services/brandService.js";
 export const createBrand = async (req, res) => {
   try {
      const data = req.body
+     console.log(req.body,"lin7")
     if(req.file){
       data.image=data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
     }
@@ -31,6 +32,7 @@ export const updateBrand = async (req, res) => {
     if(req.file){
       data.image=data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
     }
+    console.log(data.image)
     const brand = await brandService.updateBrand(req.params.id, data);
     if (!brand) return res.status(404).json({ success: false, message: "Brand not found" });
     res.status(200).json({ success: true, data: brand });
@@ -47,5 +49,34 @@ export const deleteBrand = async (req, res) => {
     res.status(200).json({ success: true, message: "Brand deleted successfully" });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+
+export const getBrandById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const brand = await brandService.getBrandByIdService(id);
+
+    if (!brand) {
+      return res.status(404).json({
+        success: false,
+        message: "Brand not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: brand,
+    });
+
+  } catch (error) {
+    console.error("Error fetching brand:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };

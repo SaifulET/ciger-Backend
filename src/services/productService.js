@@ -7,6 +7,7 @@ export const createProduct = async (data) => {
   console.log(data,"7no line")
   if (data.brand && data.brand.trim() !== "") {
     const brandDoc = await brand.findOne({ name: data.brand });
+    console.log(brandDoc)
 
     if (!brandDoc) {
       
@@ -19,6 +20,7 @@ export const createProduct = async (data) => {
 
   // Remove brand field since product schema does not use it
   delete data.brand;
+  console.log(data,"line23")
 
   const product = new Product(data);
 
@@ -29,12 +31,43 @@ export const createProduct = async (data) => {
 // Get a single product by ID
 export const getProductById = async (id) => {
   return await Product.findById(id).populate("brandId");
+  
 };
 
 // Update product
 export const updateProduct = async (id, data) => {
   console.log("b");
   console.log(data,"23 line");
+
+ let existingImages = [];
+if (data.existingImages) {
+  try {
+    // If it's already an array, use it directly
+    if (Array.isArray(data.existingImages)) {
+      existingImages = data.existingImages;
+    } else if (typeof data.existingImages === 'string') {
+      // If it's a string, try to parse it as JSON
+      existingImages = JSON.parse(data.existingImages);
+    }
+  } catch (error) {
+    console.error('Error parsing existingImages:', error);
+    existingImages = [];
+  }
+}
+
+// Initialize data.images if it doesn't exist
+if (!data.images) {
+  data.images = [];
+}
+
+// Push existingImages to data.images
+data.images.push(...existingImages);
+     
+
+    
+
+
+
 
   // If brand name is provided, convert it to brandId
   if (data.brand && data.brand.trim() !== "") {
