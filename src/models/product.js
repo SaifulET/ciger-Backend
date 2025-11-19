@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
   discount: { type: Number, default: 0 },
   averageRating: { type: Number, default: 0 },
   available: { type: Number, default: 0 },
+  quantity:{type:String,default: 0},
   isBest: { type: Boolean, default: false },
   isNew: { type: Boolean, default: false },
   isInStock: { type: Boolean, default: true },

@@ -61,10 +61,13 @@ export const updateProduct = async (req, res) => {
     }
     const data = req.body;
     data.images=imageUrls;
+    console.log("a")
     const updated = await productService.updateProduct(req.params.id, data);
+    console.log(updated,"abcd")
     if (!updated) return res.status(404).json({ success: false, message: "Product not found" });
     res.status(200).json({ success: true, data: updated });
   } catch (err) {
+    console.log(err)
     res.status(400).json({ success: false, message: err.message });
   }
 };

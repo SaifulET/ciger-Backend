@@ -1,7 +1,24 @@
+import { da } from "zod/v4/locales";
 import Product from "../models/product.js";
+import brand from "../models/brand.js";
 
 // Create a new product
 export const createProduct = async (data) => {
+  console.log(data,"7no line")
+  if (data.brand && data.brand.trim() !== "") {
+    const brandDoc = await brand.findOne({ name: data.brand });
+
+    if (!brandDoc) {
+      
+      // throw new Error(`Brand not found: ${data.brand}`);
+    }
+
+    // Replace brand name with brandId
+    data.brandId = brandDoc._id;
+  }
+
+  // Remove brand field since product schema does not use it
+  delete data.brand;
 
   const product = new Product(data);
 
@@ -16,6 +33,26 @@ export const getProductById = async (id) => {
 
 // Update product
 export const updateProduct = async (id, data) => {
+  console.log("b");
+  console.log(data,"23 line");
+
+  // If brand name is provided, convert it to brandId
+  if (data.brand && data.brand.trim() !== "") {
+    const brandDoc = await brand.findOne({ name: data.brand });
+
+    if (!brandDoc) {
+      
+      // throw new Error(`Brand not found: ${data.brand}`);
+    }
+
+    // Replace brand name with brandId
+    data.brandId = brandDoc._id;
+  }
+
+  // Remove brand field since product schema does not use it
+  delete data.brand;
+
+  // Update product
   return await Product.findByIdAndUpdate(id, data, { new: true });
 };
 

@@ -16,9 +16,9 @@ export const signup = async (req, res) => {
       message: messages,   // 👈 only your custom messages
     });
   }
-    const { user, token } = await authService.signup(req.body);
+    const { admin, token } = await authService.signup(req.body);
     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "Strict" });
-    res.status(201).json({ success: true, data: user });
+    res.status(201).json({ success: true, data: admin });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
   }
@@ -40,14 +40,18 @@ export const signin = async (req, res) => {
 
 
     const { email, password } = req.body;
-    const { user, token } = await authService.signin(email, password);
+
+    console.log(email,password,'dd')
+    const { admin, token } = await authService.signin(email, password);
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
     });
-    res.status(200).json({ success: true, data: user , token});
+    console.log(admin,"49")
+    res.status(200).json({ success: true, data: admin , token});
   } catch (err) {
+    console.log(err,"51")
     res.status(400).json({ success: false, message: err.message });
   }
 };
