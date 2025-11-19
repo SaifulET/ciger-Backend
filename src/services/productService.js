@@ -98,39 +98,79 @@ export const deleteProduct = async (id) => {
 
 
 export const getAllProducts = async (filters = {}) => {
-  const query = {};
+  console.log(filters, "line102");
 
-  // ✅ Filter by brand
-  if (filters.brandId) {
-    query.brandId = filters.brandId;
-  }
+  // Helper function to normalize string (remove spaces, lowercase)
+  const normalizeString = (str) => {
+    if (!str) return '';
+    return str.replace(/\s+/g, '').toLowerCase();
+  };
 
-  // ✅ Filter by feature (best/new)
-  if (filters.isBest) {
-   query.isBest = true;
-  }
-  // ✅ Filter by feature (best/new)
-  if (filters.isNew) {
-   query.isNew = true;
-  }
-
-  // ✅ Filter by category
-  if (filters.category) {
-    query.category = filters.category;
-  }
-
-  // ✅ Filter by category + subcategory
-  if (filters.subCategory) {
-    query.subCategory = filters.subCategory;
-  }
-
-  // ✅ Filter by discount (products having discount > 0)
-  if (filters.discount && filters.discount === "true") {
-    query.discount = { $gt: 0 };
-  }
-console.log(query)
-  // Fetch products with relations
-  return await Product.find(query)
+  // ✅ First: Get ALL products from database
+  let allProducts = await Product.find()
     .populate("brandId")
     .sort({ createdAt: -1 });
+
+  console.log("Total products from DB:", allProducts.length);
+
+  // ✅ Second: Filter products in memory
+  const filteredProducts = allProducts.filter(product => {
+    // ✅ Filter by brand name (map brand name to brandId)
+    if (filters.brand) {
+      const normalizedFilterBrand = normalizeString(filters.brand);
+      const productBrandName = product.brandId ? normalizeString(product.brandId.name) : '';
+      
+      if (productBrandName !== normalizedFilterBrand) {
+        return false;
+      }
+    }
+
+    // ✅ Filter by brandId
+    if (filters.brandId) {
+      if (product.brandId && product.brandId._id.toString() !== filters.brandId) {
+        return false;
+      }
+    }
+
+    // ✅ Filter by feature (best/new)
+    if (filters.isBest && !product.isBest) {
+      return false;
+    }
+    
+    if (filters.isNew && !product.isNew) {
+      return false;
+    }
+
+    // ✅ Filter by category (normalize both sides)
+    if (filters.category) {
+      const normalizedFilterCategory = normalizeString(filters.category);
+      const normalizedProductCategory = normalizeString(product.category);
+      
+      if (normalizedProductCategory !== normalizedFilterCategory) {
+        return false;
+      }
+    }
+
+    // ✅ Filter by subcategory (normalize both sides)
+    if (filters.subCategory) {
+      const normalizedFilterSubCategory = normalizeString(filters.subCategory);
+      const normalizedProductSubCategory = normalizeString(product.subCategory);
+      
+      if (normalizedProductSubCategory !== normalizedFilterSubCategory) {
+        return false;
+      }
+    }
+
+    // ✅ Filter by discount
+    if (filters.discount && filters.discount === "true") {
+      if (!product.discount || product.discount <= 0) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  console.log("Filtered products count:", filteredProducts.length);
+  return filteredProducts;
 };

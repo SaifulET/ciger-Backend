@@ -21,19 +21,20 @@ export const createProduct = async (req, res) => {
 // Get products (with filters)
 export const getProducts = async (req, res) => {
   try {
-
     const filters = {
-      brandId: req.query.brandId,
+      brand: req.query.brand,
       category: req.query.category,
       subCategory: req.query.subCategory,
       discount: req.query.discount,
-      isBest:req.query.best,
-      isNew:req.query.new 
+      isBest: req.query.best,
+      isNew: req.query.new 
     };
-console.log(filters)
+    
+    console.log(filters);
     const products = await productService.getAllProducts(filters);
     res.status(200).json({ success: true, count: products.length, data: products });
   } catch (err) { 
+    console.log(err)
     res.status(500).json({ success: false, message: err.message });
   }
 };
