@@ -10,9 +10,28 @@ export const createBrand = async (data) => {
 
 // ✅ Get all brands
 export const getAllBrands = async () => {
-  return await Brand.find().sort({ createdAt: -1 });
-};
+  const brands = await Brand.aggregate([
+    {
+      $addFields: {
+        normalizedName: { $trim: { input: { $toLower: "$name" } } }
+      }
+    },
+    {
+      $group: {
+        _id: "$normalizedName",
+        doc: { $first: "$$ROOT" } // take the first document for each unique normalized name
+      }
+    },
+    {
+      $replaceRoot: { newRoot: "$doc" } // replace the root with original document
+    },
+    {
+      $sort: { createdAt: -1 } // sort by createdAt
+    }
+  ]);
 
+  return brands;
+};
 // ✅ Update brand
 export const updateBrand = async (id, data) => {
   console.log(data)

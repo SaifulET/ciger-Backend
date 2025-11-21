@@ -7,12 +7,21 @@ export const createReview = async (data) => {
 };
 
 // ✅ Get all reviews or filter by productId
+
+
 export const getAllReviews = async (filter = {}) => {
-  return await Review.find(filter)
-    .populate("userId", "name email location ")
-    .populate("productId", "name title")
+  // Fetch reviews with populated product and user
+  const reviews = await Review.find(filter)
+    .populate("userId", "name email location")
+    .populate("productId", "name title") // populate product info
     .sort({ createdAt: -1 });
+
+  // Filter out reviews where productId doesn't exist
+  const validReviews = reviews.filter(review => review.productId !== null);
+
+  return validReviews;
 };
+
 
 // ✅ Update review
 export const updateReview = async (id, data) => {

@@ -171,6 +171,7 @@ export const getAllProducts = async (filters = {}) => {
     return true;
   });
 
-  console.log("Filtered products count:", filteredProducts.length);
+  console.log("Filtered products count:", filteredProducts.length, filteredProducts);
+
   return filteredProducts;
 };
