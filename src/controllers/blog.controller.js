@@ -4,10 +4,12 @@ import * as blogService from "../services/blogService.js";
 export const createBlog = async (req, res) => {
   try {
 
-    const data = req.body
+    const data = req.body.blogData
+
     if(req.file){
       data.image=data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
     }
+    console.log(data)
     const blog = await blogService.createBlog(data);
     res.status(201).json({ success: true, data: blog });
   } catch (err) {
@@ -39,7 +41,7 @@ export const getBlogById = async (req, res) => {
 // Update Blog
 export const updateBlog = async (req, res) => {
   try {
-     const data = req.body
+     const data = req.body.blogData
     if(req.file){
       data.image=data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
     }

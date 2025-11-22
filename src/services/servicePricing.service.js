@@ -10,6 +10,7 @@ export const createServicePricing = async (data) => {
 // ✅ Update service pricing
 export const updateServicePricing = async (id, data) => {
   const pricing = await ServicePricing.findById(id);
+  
   if (!pricing) throw new Error("Service pricing not found");
   Object.assign(pricing, data);
   return await pricing.save();

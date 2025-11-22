@@ -10,6 +10,7 @@ export const createImage = async (req, res) => {
         `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`
       );
     }
+    console.log(imageUrls)
     const image = await carouselService.addImage(imageUrls);
     res.status(201).json({ success: true, data: image });
   } catch (err) {

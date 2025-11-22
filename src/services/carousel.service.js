@@ -2,6 +2,7 @@ import Carousel from "../models/carousel.js";
 
 // ✅ Add a new image
 export const addImage = async (imageUrl) => {
+  console.log(imageUrl)
    const imageDocs = imageUrl.map((url) => ({ imageUrl: url }));
   return await Carousel.insertMany(imageDocs);
 };

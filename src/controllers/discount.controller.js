@@ -3,7 +3,7 @@ import * as discountService from "../services/discount.service.js";
 // ✅ Create discount
 export const createDiscount = async (req, res) => {
   try {
-    const discount = await discountService.createDiscount(req.body);
+    const discount = await discountService.createDiscount(req.body.codeData);
     res.status(201).json({ success: true, data: discount });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -34,7 +34,8 @@ export const getDiscountById = async (req, res) => {
 // ✅ Update discount by ID
 export const updateDiscountById = async (req, res) => {
   try {
-    const discount = await discountService.updateDiscountById(req.params.id, req.body);
+    const discount = await discountService.updateDiscountById(req.params.id, req.body.codeData);
+    console.log(discount,"kdkd")
     res.status(200).json({ success: true, data: discount });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

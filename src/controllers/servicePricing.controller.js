@@ -13,7 +13,7 @@ export const createServicePricing = async (req, res) => {
 // ✅ Update
 export const updateServicePricing = async (req, res) => {
   try {
-    const pricing = await servicePricingService.updateServicePricing(req.params.id, req.body);
+    const pricing = await servicePricingService.updateServicePricing(req.params.id, req.body.backendData);
     res.status(200).json({ success: true, data: pricing });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
