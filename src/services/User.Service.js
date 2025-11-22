@@ -26,3 +26,11 @@ export const updateUserProfile = async (userId, updateData) => {
   if (!updatedUser) throw new Error("User not found");
   return updatedUser;
 };
+
+
+
+
+
+export const getAllUsersService = async () => {
+  return await User.find().sort({ createdAt: -1 });
+};

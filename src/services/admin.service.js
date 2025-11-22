@@ -5,6 +5,7 @@ import crypto from "crypto";
 import SendEmail from "./email.service.js"; // implement email sending
 import { OAuth2Client } from "google-auth-library";
 import { JWT_EXPIRE_TIME, JWT_KEY, JWT_KEY_ADMIN } from "../config/token.config.js";
+import admin from "../models/admin.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
@@ -162,4 +163,29 @@ export const resetPassword = async (email, password, confirmPassword) => {
     }
     throw error;
   }
+};
+
+
+
+
+
+export const getAdminProfile = async (adminId) => {
+  const admin = await Admin.findById(adminId).select("-password");
+  if (!admin) throw new Error("admin  not found");
+  return admin;
+};
+
+export const updateAdminProfileService = async (adminId, updateData) => {
+
+console.log(updateData,"188")
+  const updatedUser = await admin.findByIdAndUpdate(
+    adminId,
+    { $set: updateData },
+    { new: true, runValidators: true }
+  ).select("-password");
+
+  if (!updatedUser) throw new Error("admin not found");
+
+  console.log(updatedUser,'189')
+  return updatedUser;
 };

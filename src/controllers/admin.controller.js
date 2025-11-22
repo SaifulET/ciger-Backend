@@ -126,6 +126,37 @@ export const resetPassword = async (req, res) => {
 
 
 
+export const getAdminProfile = async (req, res) => {
+  try {
+    const adminId = req.headers.user_id // from auth middleware or param
+    const admin = await authService.getAdminProfile(adminId);
+    res.status(200).json({ success: true, data: admin });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const updateAdminProfile = async (req, res) => {
+  try {
+    const adminId = req.headers.user_id ;
+    console.log(adminId)
+    const data= req.body
+
+    console.log(data,"145")
+     if (req.file) {
+  data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
+}
+console.log(data)
+    const updatedAdmin = await authService.updateAdminProfileService(adminId,data);
+    console.log(updatedAdmin)
+    res.status(200).json({ success: true, data: updatedAdmin });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+
+
 
 
 

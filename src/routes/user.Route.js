@@ -12,4 +12,7 @@ ProfileRoute.get("/profile",authCheck, getUserProfile);
 // PUT update user info
 ProfileRoute.put("/profile",authCheck,SingleuploadMiddleware,  updateUserProfile);
 
+
+
+
 export default ProfileRoute;
