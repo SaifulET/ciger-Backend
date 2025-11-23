@@ -3,7 +3,8 @@ import * as orderService from "../services/order.Service.js";
 // ✅ Create order
 export const createOrder = async (req, res) => {
   try {
-    const userId = req.user?._id || req.body.userId;
+    const userId = req.headers.user_id || req.body.userId;
+    console.log(req.headers.user_id)
     if (!userId) {
       return res.status(400).json({ success: false, message: "User ID required" });
     }

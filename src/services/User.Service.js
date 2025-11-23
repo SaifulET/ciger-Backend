@@ -34,3 +34,11 @@ export const updateUserProfile = async (userId, updateData) => {
 export const getAllUsersService = async () => {
   return await User.find().sort({ createdAt: -1 });
 };
+
+
+
+export const getUserProfileById = async (userId) => {
+  const user = await User.findById(userId).select("-password");
+  if (!user) throw new Error("User not found");
+  return user;
+};

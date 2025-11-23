@@ -44,3 +44,15 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+
+
+export const getUserProfileByIdController = async (req, res) => {
+  try {
+    const userId = req.params.userId // from auth middleware or param
+    const user = await userService.getUserProfileById(userId);
+    res.status(200).json({ success: true, data: user });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};

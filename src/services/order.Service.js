@@ -1,6 +1,8 @@
 import Order from "../models/order.js";
 import Cart from "../models/cart.js";
 import { createNotification } from "./notification.service.js";
+import User from "../models/user.model.js";
+
 
 // 🧮 Helper: generate next orderId (#10000 -> #10001 -> ...)
 export const generateNextOrderId = async () => {
@@ -13,77 +15,180 @@ export const generateNextOrderId = async () => {
 
 // ✅ Create Order
 export const createOrder = async (userId, orderData) => {
-  // get user's selected cart items
-  console.log(orderData)
-  const selectedCarts = await Cart.find({ userId, isSelected: true }).populate("productId");
-  if (!selectedCarts.length) throw new Error("No selected cart items found");
+  const {
+    firstName,
+    lastName,
+    country,
+    city,
+    stateName,
+    zipCode,
+    apartment,
+    phone,
+    email,
+    trackingNo,
+    isNextUsePayment,
+    tax,
+    discount,
+    shippingCost
+  } = orderData;
 
-  // generate orderId
+  // 1️⃣ Fetch selected carts
+  const carts = await Cart.find({ userId, isSelected: true })
+    .populate({
+      path: "productId",
+      populate: { path: "brandId", model: "Brand" }
+    });
+
+  if (!carts.length) throw new Error("No selected cart items found");
+
+  // 2️⃣ Fetch user details (fallback)
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  // 3️⃣ Build final address fields
+  const finalFirst = firstName || user.firstName || "";
+  const finalLast = lastName || user.lastName || "";
+  const finalCountry = country || user.country || "";
+  const finalCity = city || user.city || "";
+  const finalState = stateName || user.stateName || "";
+  const finalZip = zipCode || user.zipCode || "";
+  const finalApartment = apartment || user.apartment || "";
+
+  const fullName = `${finalFirst} ${finalLast}`.trim(); // ✅ name = firstName + lastName
+  const formattedAddress = `${finalApartment ? finalApartment + ", " : ""}${finalCity}, ${finalState}, ${finalCountry} - ${finalZip}`;
+
+  // 4️⃣ Calculate totals
+  let subtotal = 0;
+console.log(carts)
+  for (const c of carts) {
+    if(c.productId){
+      c.total = c.quantity * c.productId.price;
+    c.isOrdered = true;
+    await c.save();
+    subtotal += c.total;
+    }
+    
+  }
+
+  const total =
+    subtotal +
+    (subtotal * tax) / 100 -
+    (subtotal * discount) / 100 +
+    shippingCost;
+
+  // 5️⃣ Generate orderId
   const orderId = await generateNextOrderId();
+  const cartIds = carts.map(c => c._id);
 
-  // create order
+  // 6️⃣ Create order
   const newOrder = new Order({
-    name: orderData.name,
-    address: orderData.address,
-    email: orderData.email,
-    phone: orderData.phone,
     userId,
+    name: fullName, // ✅ combined firstName + lastName
+    firstName: finalFirst,
+    lastName: finalLast,
+    country: finalCountry,
+    city: finalCity,
+    stateName: finalState,
+    zipCode: finalZip,
+    apartment: finalApartment,
+
+    address: formattedAddress,
+
+    email: email || user.email,
+    phone: phone || user.phone,
+
+    trackingNo,
+    isNextUsePayment,
     orderId,
-    isNextUsePayment: orderData.isNextUsePayment || false,
-    carts: selectedCarts.map((c) => c._id),
+
+    tax,
+    discount,
+    shippingCost,
+    subtotal,
+    total,
+
+    state: "processing",
+    carts: cartIds
   });
 
   await newOrder.save();
-  const status="placed"
-  const order=orderId.toString()
-  const data = {userId,  order,status};
-  await createNotification(data)
 
-  // ✅ Delete selected cart items after order created
-  await Cart.deleteMany({ userId, isSelected: true });
 
-  // return populated order
+
+  // 8️⃣ Return populated order
   return await Order.findById(newOrder._id)
     .populate({
       path: "carts",
-      populate: { path: "productId", model: "Product" },
+      populate: {
+        path: "productId",
+        populate: { path: "brandId", model: "Brand" }
+      }
     });
 };
+
 
 // ✅ Get all orders
 export const getAllOrders = async () => {
   return await Order.find()
+    .sort({ createdAt: -1 })
     .populate({
       path: "carts",
-      populate: { path: "productId", model: "Product" },
+      populate: {
+        path: "productId",
+        populate: { path: "brandId", model: "Brand" }
+      }
     })
-    .sort({ createdAt: -1 });
+    .populate("userId", "firstName lastName email");
 };
 
 // ✅ Get order by ID
 export const getOrderById = async (id) => {
-  const order = await Order.findById(id).populate({
-    path: "carts",
-    populate: { path: "productId", model: "Product" },
-  });
+  const order = await Order.findById(id)
+    .populate({
+      path: "carts",
+      populate: {
+        path: "productId",
+        populate: { path: "brandId", model: "Brand" }
+      }
+    })
+    .populate("userId", "firstName lastName email");
+
   if (!order) throw new Error("Order not found");
   return order;
 };
 
+
 // ✅ Update order (state, tracking number, etc.)
 export const updateOrderById = async (id, data) => {
-  const order = await Order.findById(id);
-  if (!order) throw new Error("Order not found");
+  const allowedFields = [
+    "trackingNo",
+    "state",
+    "tax",
+    "discount",
+    "shippingCost",
+    "isNextUsePayment"
+  ];
 
-  Object.assign(order, data);
-  await order.save();
+  const updateData = {};
+  allowedFields.forEach(field => {
+    if (data[field] !== undefined) updateData[field] = data[field];
+  });
 
-  return await Order.findById(order._id)
+  const order = await Order.findByIdAndUpdate(id, updateData, { new: true })
     .populate({
       path: "carts",
-      populate: { path: "productId", model: "Product" },
-    });
+      populate: {
+        path: "productId",
+        populate: { path: "brandId", model: "Brand" }
+      }
+    })
+    .populate("userId", "firstName lastName email");
+
+  if (!order) throw new Error("Order not found");
+
+  return order;
 };
+
 
 
 
@@ -91,15 +196,13 @@ export const updateOrderById = async (id, data) => {
 
 // ✅ Get orders by user ID
 export const getOrdersByUser = async (userId) => {
-  const orders = await Order.find({ userId })
+  return await Order.find({ userId })
+    .sort({ createdAt: -1 })
     .populate({
       path: "carts",
-      populate: { path: "productId", model: "Product" },
-    })
-    .sort({ createdAt: -1 });
-    console.log(userId,orders,'abcdf')
-
-  if (!orders.length) return ("No orders found for this user");
-
-  return orders;
+      populate: {
+        path: "productId",
+        populate: { path: "brandId", model: "Brand" }
+      }
+    });
 };
