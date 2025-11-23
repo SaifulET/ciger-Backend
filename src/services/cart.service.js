@@ -14,13 +14,15 @@ console.log(existing)
   }
 
   const cart = new Cart(data);
+  console.log(cart)
   return await cart.save();
 };
 
 // ✅ Get all user cart items
 export const getUserCart = async (userId) => {
   return await Cart.find({ userId })
-    .populate("productId", "name price discount images isInStock BrandId")
+    .populate("productId", "name price discount images isInStock brandId")
+    // .populate("brandId", "name image")
     .sort({ createdAt: -1 });
 };
 

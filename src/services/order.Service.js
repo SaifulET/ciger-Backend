@@ -14,6 +14,7 @@ export const generateNextOrderId = async () => {
 // ✅ Create Order
 export const createOrder = async (userId, orderData) => {
   // get user's selected cart items
+  console.log(orderData)
   const selectedCarts = await Cart.find({ userId, isSelected: true }).populate("productId");
   if (!selectedCarts.length) throw new Error("No selected cart items found");
 

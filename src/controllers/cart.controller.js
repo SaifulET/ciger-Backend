@@ -17,6 +17,7 @@ export const getUserCart = async (req, res) => {
     const { userId } = req.params;
     
     const cart = await cartService.getUserCart(userId);
+    console.log(cart)
     res.status(200).json({ success: true, count: cart.length, data: cart });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
