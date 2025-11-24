@@ -112,8 +112,13 @@ console.log(carts)
   });
 
   await newOrder.save();
-
-
+const status="processing";
+const OrderId= newOrder._id
+// console.log(userId,"117")
+console.log("118",newOrder,"118")
+const UserId= newOrder.userId
+const data= {UserId,OrderId,status}
+createNotification(data);
 
   // 8️⃣ Return populated order
   return await Order.findById(newOrder._id)
@@ -124,6 +129,8 @@ console.log(carts)
         populate: { path: "brandId", model: "Brand" }
       }
     });
+
+    
 };
 
 

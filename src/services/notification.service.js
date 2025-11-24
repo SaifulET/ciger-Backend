@@ -1,5 +1,5 @@
 import Notification from "../models/notification.js";
-import User from "../models/user.model.js";
+import userModel from "../models/user.model.js";
 
 /**
  * Generate message automatically based on status
@@ -16,6 +16,8 @@ const generateMessage = (status) => {
       return "Your cancelled order has been marked as refunded";
     case "cancelled":
       return "Order has been cancelled";
+    case "processing":
+      return "Order has been placed";
     default:
       return "You have a new notification";
   }
@@ -25,20 +27,22 @@ const generateMessage = (status) => {
  * Create notification
  */
 export const createNotification = async (data) => {
-  const { userId, orderId, status } = data;
+  console.log(data,'28')
+  const { UserId, OrderId, status } = data;
 
-  if (!userId) throw new Error("UserId is required");
+  if (!UserId) throw new Error("UserId is required");
 
   // Fetch user name automatically
-  const user = await User.findById(userId).select("name");
-  const userName = user?.name || "Unknown";
+  const user = await userModel.findById(UserId).select("firstName");
+  console.log(user,"ue")
+  const userName = user?.name ||user?.firstName || "Unknown";
 
   const message = generateMessage(status);
 
   const notification = await Notification.create({
-    userId,
+    userId:UserId,
     userName,
-    orderId,
+    orderId:OrderId,
     status,
     message,
   });

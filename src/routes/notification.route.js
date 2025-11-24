@@ -11,7 +11,7 @@ import {authChecks} from "../middlewares/authForAdmin.middleware.js"
 const notificationRoute = express.Router();
 
 // POST create notification
-notificationRoute.post("/createNotification", authCheck,createNotification);
+notificationRoute.post("/createNotification", createNotification);
 
 // GET all notifications of a user
 notificationRoute.get("/getNotifications/:userId",authCheck,  getUserNotifications);

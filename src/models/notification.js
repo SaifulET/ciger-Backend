@@ -7,7 +7,7 @@ const notificationSchema = new mongoose.Schema(
     orderId: { type: mongoose.Schema.Types.ObjectId, ref: "Order" },
     status: {
       type: String,
-      enum: ["placed", "shipped", "delivered", "cancelled", "refunded"],
+      enum: ["placed", "shipped", "delivered", "cancelled", "refunded","processing"],
       default: "placed",
     },
     message: { type: String, required: true },
