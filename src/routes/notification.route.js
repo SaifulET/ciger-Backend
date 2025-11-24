@@ -16,7 +16,7 @@ notificationRoute.post("/createNotification", createNotification);
 // GET all notifications of a user
 notificationRoute.get("/getNotifications/:userId",authCheck,  getUserNotifications);
 
-notificationRoute.get("/getAllNotifications",authChecks,  getAllNotificationsController);
+notificationRoute.get("/getAllNotifications",  getAllNotificationsController);
 
 
 export default notificationRoute;
