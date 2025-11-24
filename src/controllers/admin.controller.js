@@ -129,6 +129,7 @@ export const resetPassword = async (req, res) => {
 export const getAdminProfile = async (req, res) => {
   try {
     const adminId = req.headers.user_id // from auth middleware or param
+    console.log(adminId,"132")
     const admin = await authService.getAdminProfile(adminId);
     res.status(200).json({ success: true, data: admin });
   } catch (err) {
