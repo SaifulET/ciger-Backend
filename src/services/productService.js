@@ -5,7 +5,27 @@ import brand from "../models/brand.js";
 // Create a new product
 export const createProduct = async (data) => {
   console.log(data,"7no line")
-  if (data.brand && data.brand.trim() !== "") {
+
+
+ const normalize = (str) => str.replace(/\s+/g, "").toLowerCase();
+
+  const inputNameNormalized = normalize(data.name);
+console.log(inputNameNormalized,'13')
+  // Fetch all products only with name field (lightweight)
+  const allProducts = await Product.find({}, { name: 1 });
+
+  // Check duplicate by normalization
+  const duplicate = allProducts.find(p => normalize(p.name) === inputNameNormalized);
+console.log(duplicate,'19')
+  if (duplicate) {
+    return {
+      success: false,
+      message: "Product already exists",
+      product: duplicate
+    };
+  }
+  console.log("abc")
+  if (data.brand ) {
     const brandDoc = await brand.findOne({ name: data.brand });
     console.log(brandDoc)
 
@@ -98,7 +118,6 @@ export const deleteProduct = async (id) => {
 
 
 export const getAllProducts = async (filters = {}) => {
-  console.log(filters, "line102");
 
   // Helper function to normalize string (remove spaces, lowercase)
   const normalizeString = (str) => {
@@ -111,7 +130,6 @@ export const getAllProducts = async (filters = {}) => {
     .populate("brandId")
     .sort({ createdAt: -1 });
 
-  console.log("Total products from DB:", allProducts.length);
 
   // ✅ Second: Filter products in memory
   const filteredProducts = allProducts.filter(product => {
@@ -171,7 +189,7 @@ export const getAllProducts = async (filters = {}) => {
     return true;
   });
 
-  console.log("Filtered products count:", filteredProducts.length, filteredProducts);
+ 
 
   return filteredProducts;
 };

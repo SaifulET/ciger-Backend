@@ -12,8 +12,13 @@ export const createProduct = async (req, res) => {
     const data = req.body;
     data.images=imageUrls;
     const product = await productService.createProduct(data);
+    
+    if(product.success===false)
+    res.status(201).json({ success: false,message:"product Already exist"});
+  else
     res.status(201).json({ success: true, data: product });
   } catch (err) {
+    console.log(err)
     res.status(400).json({ success: false, message: err.message });
   }
 };
@@ -30,11 +35,9 @@ export const getProducts = async (req, res) => {
       isNew: req.query.new 
     };
     
-    console.log(filters);
     const products = await productService.getAllProducts(filters);
     res.status(200).json({ success: true, count: products.length, data: products });
   } catch (err) { 
-    console.log(err)
     res.status(500).json({ success: false, message: err.message });
   }
 };

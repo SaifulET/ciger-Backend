@@ -21,10 +21,17 @@ console.log(existing)
 // ✅ Get all user cart items
 export const getUserCart = async (userId) => {
   return await Cart.find({ userId })
-    .populate("productId", "name price discount images isInStock brandId")
-    // .populate("brandId", "name image")
+    .populate({
+      path: "productId",
+      select: "name price discount images isInStock brandId",
+      populate: {
+        path: "brandId",
+        select: "name image", // fields from Brand model
+      },
+    })
     .sort({ createdAt: -1 });
 };
+
 
 // ✅ Update cart by ID (quantity, selection)
 export const updateCart = async (id, data) => {
