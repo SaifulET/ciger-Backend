@@ -43,11 +43,12 @@ export const signin = async (req, res) => {
 
     console.log(email,password,'dd')
     const { admin, token } = await authService.signin(email, password);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-    });
+   res.cookie("token", token, {
+  httpOnly: false,      // frontend can read it
+  secure: true,         // required for Render (HTTPS)
+  sameSite: "None",     // required for cross-domain
+  path: "/",            // ensure frontend can access anywhere
+});
     console.log(admin,"49")
     res.status(200).json({ success: true, data: admin , token});
   } catch (err) {
