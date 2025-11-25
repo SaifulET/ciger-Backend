@@ -10,7 +10,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
 export const signup = async (data) => {
   const { email, password, firstName,lastName } = data;
-
+console.log(data,"13")
   // Check for existing user first
   const existingUser = await User.findOne({ email });
 
@@ -31,7 +31,8 @@ export const signup = async (data) => {
     const user = new User({
       email,
       password: hashedPassword,
-      
+      firstName,
+      lastName
     });
 
     const token = jwt.sign({ id: user._id }, JWT_KEY, {
