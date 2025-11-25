@@ -1,7 +1,7 @@
 import { TokenDecodeForAdmin} from "../utils/tokenUtility.js";
 export const authChecks=async (req,res,next)=>{
 console.log("lkdk")
-  console.log('4',req.cookies.token,"4")
+  console.log('4',req.cookies,"4")
   const token= req.cookies.token;
     const authHeader = req.headers.authorization; 
 
