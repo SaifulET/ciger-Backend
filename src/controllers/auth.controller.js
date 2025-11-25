@@ -40,11 +40,14 @@ export const signin = async (req, res) => {
 
 
     const { email, password } = req.body;
+    
+
     const { user, token } = await authService.signin(email, password);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
+       res.cookie("token", token, {
+      httpOnly: false,      // frontend can read it
+      secure: true,         // required for Render (HTTPS)
+      sameSite: "None",     // required for cross-domain
+      path: "/",            // ensure frontend can access anywhere
     });
     res.status(200).json({ success: true, data: user , token});
   } catch (err) {
