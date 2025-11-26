@@ -2,8 +2,9 @@ import Breakdown from "../models/breakdown.js";
 import { getCurrentMonthYear } from "../utils/date.js";
 
 export const createBreakdown = async ({ category, amount }) => {
+  console.log("abc")
   const { month, year } = getCurrentMonthYear();
-
+console.log("ab",category,amount)
   return await Breakdown.create({
     month,
     year,

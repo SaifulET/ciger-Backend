@@ -2,6 +2,7 @@ import Order from "../models/order.js";
 import Cart from "../models/cart.js";
 import { createNotification } from "./notification.service.js";
 import User from "../models/user.model.js";
+import { createBreakdown } from "./breakdownService.js";
 
 
 // 🧮 Helper: generate next orderId (#10000 -> #10001 -> ...)
@@ -59,7 +60,7 @@ export const createOrder = async (userId, orderData) => {
 
   // 4️⃣ Calculate totals
   let subtotal = 0;
-console.log(carts)
+console.log(carts,"cartId")
   for (const c of carts) {
     if(c.productId){
       c.total = c.quantity * c.productId.price;
@@ -79,6 +80,7 @@ console.log(carts)
   // 5️⃣ Generate orderId
   const orderId = await generateNextOrderId();
   const cartIds = carts.map(c => c._id);
+
 
   // 6️⃣ Create order
   const newOrder = new Order({
@@ -119,6 +121,17 @@ console.log("118",newOrder,"118")
 const UserId= newOrder.userId
 const data= {UserId,OrderId,status}
 createNotification(data);
+
+ for (const c of carts) {
+    if(c.productId){
+      let amount = c.quantity * c.productId.price;
+      let category= c.productId.category;
+      createBreakdown(category, amount);
+    }
+    
+  }
+
+
 
 
   // 8️⃣ Return populated order
@@ -168,6 +181,7 @@ export const getOrderById = async (id) => {
 
 // ✅ Update order (state, tracking number, etc.)
 export const updateOrderById = async (id, data) => {
+  console.log(data,'184')
   const allowedFields = [
     "trackingNo",
     "state",
@@ -181,7 +195,7 @@ export const updateOrderById = async (id, data) => {
   allowedFields.forEach(field => {
     if (data[field] !== undefined) updateData[field] = data[field];
   });
-
+console.log("197",updateData)
   const order = await Order.findByIdAndUpdate(id, updateData, { new: true })
     .populate({
       path: "carts",
@@ -193,6 +207,24 @@ export const updateOrderById = async (id, data) => {
     .populate("userId", "firstName lastName email");
 
   if (!order) throw new Error("Order not found");
+  console.log(data.state,'209')
+  const UserId= order.userId._id
+  const OrderId=id;
+  if(data.state){
+    const status=data.state;
+    createNotification({OrderId,UserId,status});
+  }
+if(data.state=="refunded") {
+  console.log("210",order.total)
+
+      let amount = order.total;
+      let category= "refund";
+      console.log(amount,category);
+      const temp = await createBreakdown({category, amount});
+   
+    
+  }
+
 
   return order;
 };
