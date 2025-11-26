@@ -41,6 +41,7 @@ export const getOrderById = async (req, res) => {
 // ✅ Update order by ID
 export const updateOrderById = async (req, res) => {
   try {
+    
     const order = await orderService.updateOrderById(req.params.id, req.body);
     res.status(200).json({ success: true, data: order });
   } catch (err) {

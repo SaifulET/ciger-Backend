@@ -25,6 +25,7 @@ import categoryPaymentRouter from "./routes/categoryPayment.route.js";
 import ProfileRoute from "./routes/user.Route.js";
 import notificationRoute from "./routes/notification.route.js";
 import adminRoutes from "./routes/admin.Route.js";
+import BreakdownRouter from "./routes/breakdown.route.js";
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -79,6 +80,7 @@ app.use("/order", orderRouter);
 app.use("/categoryPayment", categoryPaymentRouter);
 app.use("/profile", ProfileRoute);
 app.use("/notification", notificationRoute);
+app.use("/dashboard", BreakdownRouter);
 
 // MongoDB Connection
 mongoose
