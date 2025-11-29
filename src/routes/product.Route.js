@@ -4,7 +4,8 @@ import {
   getProducts,
   getProductById,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  filterProductsController
 } from "../controllers/productController.js";
 import { uploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
@@ -24,5 +25,8 @@ ProuductRouter.put("/updateProductById/:id",uploadMiddleware.array("images", 10)
 
 // Delete product
 ProuductRouter.delete("/deleteProductById/:id", deleteProduct);
+
+
+ProuductRouter.get("/filter/:keyword", filterProductsController);
 
 export default ProuductRouter;

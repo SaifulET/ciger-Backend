@@ -87,3 +87,30 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+
+
+
+export const filterProductsController = async (req, res) => {
+  try {
+    console.log("d")
+    const { keyword } = req.params;
+    console.log(",",keyword)
+
+    if (!keyword) {
+      return res.status(400).json({ message: "Keyword is required" });
+    }
+
+    const products = await productService.filterProductsService(keyword);
+
+    return res.status(200).json({
+      success: true,
+      count: products.length,
+      data:products,
+    });
+
+  } catch (error) {
+    console.error("Product filter error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

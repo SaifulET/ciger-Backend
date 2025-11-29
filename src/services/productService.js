@@ -193,3 +193,45 @@ export const getAllProducts = async (filters = {}) => {
 
   return filteredProducts;
 };
+
+
+
+
+
+
+// Normalize string for flexible matching
+const normalize = (str = "") => str.replace(/\s+/g, "").toLowerCase();
+
+export const filterProductsService = async (keyword) => {
+  const normalized = normalize(keyword);
+
+  // Step 1 ----- Search by PRODUCT NAME
+  let products = await Product.find() .populate("brandId")
+    .sort({ createdAt: -1 });;
+  let filteredByProduct = products.filter(p =>
+    normalize(p.name).includes(normalized)
+  );
+
+  if (filteredByProduct.length > 0) {
+    return filteredByProduct;
+  }
+
+  // Step 2 ----- Search by BRAND NAME
+  const brands = await  brand.find();
+  const matchedBrands = brands.filter(b =>
+    normalize(b.name).includes(normalized)
+  );
+
+  if (matchedBrands.length === 0) {
+    return []; // nothing found
+  }
+
+  const matchedBrandIds = matchedBrands.map(b => b._id);
+
+  const productsByBrand = await Product.find({
+    brandId: { $in: matchedBrandIds }
+  }) .populate("brandId")
+    .sort({ createdAt: -1 });;
+
+  return productsByBrand;
+};

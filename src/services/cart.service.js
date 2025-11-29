@@ -35,6 +35,7 @@ export const getUserCart = async (userId) => {
 
 // ✅ Update cart by ID (quantity, selection)
 export const updateCart = async (id, data) => {
+  
   return await Cart.findByIdAndUpdate(id, data, { new: true });
 };
 
