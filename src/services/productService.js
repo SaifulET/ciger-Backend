@@ -120,11 +120,7 @@ export const deleteProduct = async (id) => {
 export const getAllProducts = async (filters = {}) => {
 
   // Helper function to normalize string (remove spaces, lowercase)
-  const normalizeString = (str) => {
-    if (!str) return '';
-    return str.replace(/\s+/g, '').toLowerCase();
-  };
-
+ 
   // ✅ First: Get ALL products from database
   let allProducts = await Product.find()
     .populate("brandId")
@@ -134,21 +130,10 @@ export const getAllProducts = async (filters = {}) => {
   // ✅ Second: Filter products in memory
   const filteredProducts = allProducts.filter(product => {
     // ✅ Filter by brand name (map brand name to brandId)
-    if (filters.brand) {
-      const normalizedFilterBrand = normalizeString(filters.brand);
-      const productBrandName = product.brandId ? normalizeString(product.brandId.name) : '';
-      
-      if (productBrandName !== normalizedFilterBrand) {
-        return false;
-      }
-    }
+  
 
     // ✅ Filter by brandId
-    if (filters.brandId) {
-      if (product.brandId && product.brandId._id.toString() !== filters.brandId) {
-        return false;
-      }
-    }
+    
 
     // ✅ Filter by feature (best/new)
     if (filters.isBest && !product.isBest) {
@@ -159,25 +144,8 @@ export const getAllProducts = async (filters = {}) => {
       return false;
     }
 
-    // ✅ Filter by category (normalize both sides)
-    if (filters.category) {
-      const normalizedFilterCategory = normalizeString(filters.category);
-      const normalizedProductCategory = normalizeString(product.category);
-      
-      if (normalizedProductCategory !== normalizedFilterCategory) {
-        return false;
-      }
-    }
-
-    // ✅ Filter by subcategory (normalize both sides)
-    if (filters.subCategory) {
-      const normalizedFilterSubCategory = normalizeString(filters.subCategory);
-      const normalizedProductSubCategory = normalizeString(product.subCategory);
-      
-      if (normalizedProductSubCategory !== normalizedFilterSubCategory) {
-        return false;
-      }
-    }
+    
+   
 
     // ✅ Filter by discount
     if (filters.discount && filters.discount === "true") {

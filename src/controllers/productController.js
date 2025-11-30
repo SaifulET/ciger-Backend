@@ -27,9 +27,7 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   try {
     const filters = {
-      brand: req.query.brand,
-      category: req.query.category,
-      subCategory: req.query.subCategory,
+      
       discount: req.query.discount,
       isBest: req.query.best,
       isNew: req.query.new 
