@@ -82,6 +82,8 @@ console.log(carts,"cartId")
   const cartIds = carts.map(c => c._id);
 
 
+
+
   // 6️⃣ Create order
   const newOrder = new Order({
     userId,
@@ -121,17 +123,21 @@ console.log("118",newOrder,"118")
 const UserId= newOrder.userId
 const data= {UserId,OrderId,status}
 createNotification(data);
+console.log(carts,"124")
 
  for (const c of carts) {
     if(c.productId){
       let amount = c.quantity * c.productId.price;
       let category= c.productId.category;
-      createBreakdown(category, amount);
+      createBreakdown({category, amount});
     }
-    
+  
   }
 
-
+await Cart.updateMany(
+  { _id: { $in: carts.map(c => c._id) } },
+  { $set: { isSelected: false } }
+);
 
 
   // 8️⃣ Return populated order

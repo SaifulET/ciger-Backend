@@ -34,6 +34,7 @@ export const getProducts = async (req, res) => {
     };
     
     const products = await productService.getAllProducts(filters);
+  
     res.status(200).json({ success: true, count: products.length, data: products });
   } catch (err) { 
     res.status(500).json({ success: false, message: err.message });

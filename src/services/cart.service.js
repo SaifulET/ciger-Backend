@@ -6,6 +6,7 @@ export const createCart = async (data) => {
   const existing = await Cart.findOne({
     userId: data.userId,
     productId: data.productId,
+    isSelected:true,
   });
 console.log(existing)
   if (existing) {
@@ -20,17 +21,21 @@ console.log(existing)
 
 // ✅ Get all user cart items
 export const getUserCart = async (userId) => {
-  return await Cart.find({ userId })
+  return await Cart.find({ 
+      userId,
+      isSelected: true
+    })
     .populate({
       path: "productId",
       select: "name price discount images isInStock brandId",
       populate: {
         path: "brandId",
-        select: "name image", // fields from Brand model
+        select: "name image",
       },
     })
     .sort({ createdAt: -1 });
 };
+
 
 
 // ✅ Update cart by ID (quantity, selection)
