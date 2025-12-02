@@ -15,7 +15,7 @@ console.log(existing)
   }
 
   const cart = new Cart(data);
-  console.log(cart)
+  console.log(cart,"abc")
   return await cart.save();
 };
 
