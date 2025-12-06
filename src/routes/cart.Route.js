@@ -4,7 +4,8 @@ import {
   getUserCart,
   updateCart,
   clearCart,
-  deleteCartById
+  deleteCartById,
+  UnCheckedIdController
 } from "../controllers/cart.controller.js";
 import {authCheck} from "../middlewares/auth.middleware.js"
 
@@ -24,5 +25,8 @@ cartRoute.delete("/clearCart/:userId", clearCart);
 
 // Delete cart item by ID
 cartRoute.delete("/deleteCart/:id",deleteCartById);
+
+
+cartRoute.post("/checkedid",UnCheckedIdController)
 
 export default cartRoute;

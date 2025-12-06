@@ -27,6 +27,7 @@ import notificationRoute from "./routes/notification.route.js";
 import adminRoutes from "./routes/admin.Route.js";
 import BreakdownRouter from "./routes/breakdown.route.js";
 import MailRouter from "./routes/mail.route.js";
+
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -83,6 +84,7 @@ app.use("/profile", ProfileRoute);
 app.use("/notification", notificationRoute);
 app.use("/dashboard", BreakdownRouter);
 app.use("/mail",MailRouter)
+
 
 // MongoDB Connection
 mongoose

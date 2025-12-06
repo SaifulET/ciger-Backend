@@ -60,3 +60,33 @@ export const clearCart = async (userId) => {
 export const deleteCartById = async (id) => {
   return await Cart.findByIdAndDelete(id);
 };
+
+
+
+
+export const unCheckCartService = async (cartIds, userId) => {
+  try {
+    // 1️⃣ Fetch selected & not-ordered cart items of this user
+    const selectedCarts = await Cart.find({
+      userId,
+      isSelected: true,
+      isOrdered: false,
+    });
+
+    // 2️⃣ Update all carts of this user WHERE ID is NOT in the cartIds array
+    await Cart.updateMany(
+      {
+        userId,
+        _id: { $nin: cartIds },   // carts NOT in cartIds
+      },
+      {
+        $set: { isSelected: false },
+      }
+    );
+
+    return { selectedCarts };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

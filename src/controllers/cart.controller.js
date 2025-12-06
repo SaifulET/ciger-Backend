@@ -60,3 +60,36 @@ export const deleteCartById = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+
+
+
+
+export const UnCheckedIdController = async (req, res) => {
+  try {
+    console.log(req.body)
+    const { cartIds, userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    if (!Array.isArray(cartIds)) {
+      return res.status(400).json({ message: "cartIds must be an array" });
+    }
+
+    const result = await cartService.unCheckCartService(cartIds, userId);
+
+    return res.status(200).json({
+      message: "Cart selection updated",
+      selectedCarts: result,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
