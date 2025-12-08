@@ -14,7 +14,9 @@ export const createCart = async (req, res) => {
 // ✅ Get all user cart items
 export const getUserCart = async (req, res) => {
   try {
+    console.log("get user cart controller",req.params);
     const { userId } = req.params;
+    console.log("userid")
     
     const cart = await cartService.getUserCart(userId);
     console.log(cart)

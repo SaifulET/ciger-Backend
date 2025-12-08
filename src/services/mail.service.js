@@ -7,11 +7,12 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: process.env.ZOHO_EMAIL,
-    pass: process.env.ZOHO_APP_PASSWORD
+    pass: process.env.ZOHO_APP_PASSWORDS
   }
 });
 export const mailService=async(data)=>{
      const { email, subject, message } = data;
+console.log("Mail service data:", data);
 
 try {
     await transporter.sendMail({
@@ -24,6 +25,7 @@ try {
     return ({ message: "Message sent successfully!" });
   } catch (error) {
     // console.error(error);
+      console.error("Zoho Mail Error:", error);
     return ({ err: "Failed to send message." });
   }
 }

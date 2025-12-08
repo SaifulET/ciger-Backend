@@ -27,6 +27,8 @@ import notificationRoute from "./routes/notification.route.js";
 import adminRoutes from "./routes/admin.Route.js";
 import BreakdownRouter from "./routes/breakdown.route.js";
 import MailRouter from "./routes/mail.route.js";
+import paymentRouter from "./routes/payment.route.js";
+import taxRouter from "./routes/tax.route.js";
 
 dotenv.config();
 const app = express();
@@ -84,7 +86,8 @@ app.use("/profile", ProfileRoute);
 app.use("/notification", notificationRoute);
 app.use("/dashboard", BreakdownRouter);
 app.use("/mail",MailRouter)
-
+app.use("/payment", paymentRouter); // Payment Route
+app.use("/tax", taxRouter); // Tax Route
 
 // MongoDB Connection
 mongoose
