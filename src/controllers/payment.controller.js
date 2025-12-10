@@ -1,31 +1,38 @@
 // controllers/payment.controller.js
 
 import axios from "axios";
-import { processPaymentService } from "../services/payment.service.js";
+// import { processPaymentService } from "../services/payment.service.js";
 
 export const processPaymentController = async (req, res) => {
- const { encryptedCard, amount, currency } = req.body.body;
-console.log("Received payment request:",req.body.body, encryptedCard, amount, currency);
-  try {
+
+
+ try {
+    const {
+     payment,
+    shippingInfo
+    } = req.body;
+
     const payload = {
-      api_username: process.env.ECRYPT_API_USERNAM,
-      api_password: process.env.ECRYPT_API_PASSWORD,
-      key_id: process.env.ECRYPT_KEY_ID,
-      card_data: encryptedCard,
-      amount,
-      currency,
+      type: "sale",
+      security_key: process.env.ECRYPT_KEY_ID,
+      payment_token: payment.paymentToken,
+      amount: payment.amount,
+      first_name: shippingInfo.firstName,
+      last_name: shippingInfo.lastName,
+      email: shippingInfo.email,
     };
+console.log("payload", payload);
+    const form = new URLSearchParams(payload).toString();
+    const ECRYPT_API_URL = "https://ecrypt.transactiongateway.com/api/transact.php";
 
-    const response = await axios.post(
-      process.env.ECRYPT_API_URL,
-      payload
-    );
 
-    return res.json(response.data);
-  } catch (err) {
-    return res.status(500).json({
-      message: "Payment failed",
-      error: err.response?.data || err.message,
+    const { data } = await axios.post(ECRYPT_API_URL, form, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
+
+    res.json({ success: true, response: data });
+  } catch (err) {
+    console.error("PAYMENT ERROR:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 }
