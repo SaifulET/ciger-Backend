@@ -29,6 +29,7 @@ const orderSchema = new mongoose.Schema({
   isNextUsePayment: { type: Boolean, default: false },
 
   carts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cart" }],
+  transactionId: { type: String, default: "" }
 }, { timestamps: true });
 
 

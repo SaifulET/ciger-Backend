@@ -6,7 +6,7 @@ export const calculateTaxController = async (req, res) => {
   }
 console.log("tax controller called",req.body);
   const { amount,  to_zip, to_state, shipping } = req.body;
-let from_zip=73101 ;
+let from_zip=60203 ;
   if (!amount || !from_zip || !to_zip || !to_state) {
     return res.status(400).json({ message: "Missing required fields" });
   }

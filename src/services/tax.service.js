@@ -10,7 +10,7 @@ export const calculateTaxService = async (payload) => {
   const tax = await client.taxForOrder({
     from_country: "US",
     from_zip,
-    from_state: "CA", // your origin state
+    from_state: "IL", // your origin state
     to_country: "US",
     to_zip,
     to_state,
@@ -21,9 +21,9 @@ export const calculateTaxService = async (payload) => {
         id: "Main Location",
         country: "US",
         zip: from_zip,
-        state: "CA",
-        city: "Los Angeles",
-        street: "123 Main Street",
+        state: "IL",
+        city: "evanston",
+        street: "3350 Chruch St",
       },
     ],
   });

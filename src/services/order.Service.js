@@ -30,7 +30,8 @@ export const createOrder = async (userId, orderData) => {
     isNextUsePayment,
     tax,
     discount,
-    shippingCost
+    shippingCost,
+    transactionId
   } = orderData;
 
   // 1️⃣ Fetch selected carts
@@ -112,6 +113,7 @@ console.log(carts,"cartId")
     total,
 
     state: "processing",
+    transactionId,
     carts: cartIds
   });
 
