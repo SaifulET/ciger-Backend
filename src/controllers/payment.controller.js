@@ -7,7 +7,11 @@ import { createOrder } from "../services/order.Service.js";
 
 
 
-
+const generateOrderNumber = () => {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 10000);
+  return `ORD-${timestamp}-${random}`;
+};
 
 const parsePaymentResponse = (responseString) => {
   const result = {};
@@ -42,7 +46,7 @@ export const processPaymentController = async (req, res) => {
      payment,
     shippingInfo,totals
     } = req.body;
-
+const orderNumber = generateOrderNumber();
     const payload = {
       type: "sale",
       security_key: process.env.ECRYPT_KEY_ID,
@@ -51,6 +55,7 @@ export const processPaymentController = async (req, res) => {
       first_name: shippingInfo.firstName,
       last_name: shippingInfo.lastName,
       email: shippingInfo.email,
+       orderid: orderNumber,
     };
 console.log("payload", payload);
     const form = new URLSearchParams(payload).toString();
@@ -64,7 +69,7 @@ console.log("payload", payload);
 
     const parsedResponse = parsePaymentResponse(data);
     console.log("Parsed Payment Response:", parsedResponse);
-if(data.response.transactionid !== 0) {
+if(parsedResponse.transactionid !== 0) {
   const orderData= {
     firstName: shippingInfo.firstName,
     lastName: shippingInfo.lastName,
@@ -72,7 +77,7 @@ if(data.response.transactionid !== 0) {
     country: shippingInfo.country,
     address: shippingInfo.address,
     city: shippingInfo.city,
-    stateName: shippingInfo.stateName,
+    stateName: shippingInfo.state,
     zipCode: shippingInfo.zipCode,
     apartment: shippingInfo.apartment,
     phone: shippingInfo.phone,
@@ -88,7 +93,7 @@ await createOrder(req.body.userId,orderData)
 
 
 }
-    res.json({ success: true, response: data });
+    res.json({ success: true, response: data ,orderid:parsedResponse.orderid});
   } catch (err) {
     console.error("PAYMENT ERROR:", err);
     res.status(500).json({ success: false, error: err.message });

@@ -27,6 +27,7 @@ export const calculateTaxService = async (payload) => {
       },
     ],
   });
-
+console.error("calculated tax:", tax);
+console.log("calculated tax:", tax);
   return tax;
 };

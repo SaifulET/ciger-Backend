@@ -3,7 +3,7 @@ import Cart from "../models/cart.js";
 import { createNotification } from "./notification.service.js";
 import User from "../models/user.model.js";
 import { createBreakdown } from "./breakdownService.js";
-
+import crypto from "crypto";
 
 // 🧮 Helper: generate next orderId (#10000 -> #10001 -> ...)
 export const generateNextOrderId = async () => {
@@ -33,6 +33,7 @@ export const createOrder = async (userId, orderData) => {
     shippingCost,
     transactionId
   } = orderData;
+  console.log("Creating order for order:", orderData);
 
   // 1️⃣ Fetch selected carts
   const carts = await Cart.find({ userId, isSelected: true })
@@ -44,8 +45,27 @@ export const createOrder = async (userId, orderData) => {
   if (!carts.length) throw new Error("No selected cart items found");
 
   // 2️⃣ Fetch user details (fallback)
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
+  let user = await User.findById(userId);
+  if(!user && email){
+    user = await User.findOne({ email });
+    if(user){
+      userId= user._id;
+    }
+  }
+
+   else {
+    const randomPassword = crypto.randomBytes(6).toString("hex");
+    let createdUser = await User.create({
+        email,
+        password: randomPassword,
+        firstName,
+        lastName
+    });
+    user = createdUser;
+    console.log("Created new user for order:", createdUser);
+    userId = createdUser._id;
+}
+console.log("user details:", user);
 
   // 3️⃣ Build final address fields
   const finalFirst = firstName || user.firstName || "";
