@@ -19,7 +19,6 @@ let from_zip=60203 ;
       to_state,
       shipping,
     });
-    console.log("tax data",taxData);
 
     return res.status(200).json(taxData);
   } catch (err) {

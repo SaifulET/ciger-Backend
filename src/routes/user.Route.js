@@ -7,11 +7,11 @@ import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 const ProfileRoute = express.Router();
 
 // GET user info
-ProfileRoute.get("/profile",authCheck, getUserProfile);
+ProfileRoute.get("/profiles/:userId", getUserProfile);
 ProfileRoute.get("/profile/:userId", getUserProfileByIdController);
 
 // PUT update user info
-ProfileRoute.put("/profile",authCheck,SingleuploadMiddleware,  updateUserProfile);
+ProfileRoute.put("/profile/:userId",SingleuploadMiddleware,  updateUserProfile);
 
 
 

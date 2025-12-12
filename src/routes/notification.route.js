@@ -14,7 +14,7 @@ const notificationRoute = express.Router();
 notificationRoute.post("/createNotification", createNotification);
 
 // GET all notifications of a user
-notificationRoute.get("/getNotifications/:userId",authCheck,  getUserNotifications);
+notificationRoute.get("/getNotifications/:userId",  getUserNotifications);
 
 notificationRoute.get("/getAllNotifications",  getAllNotificationsController);
 

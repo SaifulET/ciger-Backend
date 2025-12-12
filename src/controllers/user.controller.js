@@ -2,7 +2,7 @@ import * as userService from "../services/User.Service.js";
 
 export const getUserProfile = async (req, res) => {
   try {
-    const userId = req.headers.user_id // from auth middleware or param
+    const userId = req.params.userId // from auth middleware or param
     const user = await userService.getUserProfile(userId);
     res.status(200).json({ success: true, data: user });
   } catch (err) {
@@ -12,7 +12,7 @@ export const getUserProfile = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
   try {
-    const userId = req.headers.user_id ;
+    const userId = req.params.userId ;
     console.log(userId)
     const data= req.body
      if (req.file) {

@@ -14,10 +14,11 @@ export const createNotification = async (req, res) => {
 
 export const getUserNotifications = async (req, res) => {
   try {
-    const userId = req.headers.user_id;
+    const userId = req.params.userId;
     const notifications = await notificationService.getNotificationsByUser(userId);
     res.status(200).json({ success: true, data: notifications });
   } catch (err) {
+    console.log(err,"20")
     res.status(400).json({ success: false, message: err.message });
   }
 };
