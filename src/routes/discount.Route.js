@@ -4,7 +4,8 @@ import {
   getAllDiscounts,
   getDiscountById,
   updateDiscountById,
-  deleteDiscountById
+  deleteDiscountById,
+  getDiscountByCode
 } from "../controllers/discount.controller.js";
 
 const discountRouter = express.Router();
@@ -14,5 +15,7 @@ discountRouter.get("/getAllDiscount", getAllDiscounts);          // Get all disc
 discountRouter.get("/getDiscountById/:id", getDiscountById);       // Get discount by ID
 discountRouter.put("/updateDiscountById/:id", updateDiscountById);    // Update discount by ID
 discountRouter.delete("/deleteDiscountById/:id", deleteDiscountById); // Delete discount by ID
+
+discountRouter.get("/getDiscountByCode/:code", getDiscountByCode);
 
 export default discountRouter;

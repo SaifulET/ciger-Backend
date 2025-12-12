@@ -24,6 +24,8 @@ const orderSchema = new mongoose.Schema({
   shippingCost: { type: Number, default: 0 },
   subtotal: { type: Number, default: 0 },
   total: { type: Number, default: 0 },
+  transactionId: { type: String, default: "" },
+  orderid: { type: String, unique: true },
 
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   isNextUsePayment: { type: Boolean, default: false },

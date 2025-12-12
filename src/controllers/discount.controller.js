@@ -51,3 +51,26 @@ export const deleteDiscountById = async (req, res) => {
     res.status(404).json({ success: false, message: err.message });
   }
 };
+
+
+
+
+
+export const getDiscountByCode = async (req, res) => {
+  try {
+    const { code } = req.params;
+console.log("code received in controller:", code);
+    const percentage = await discountService.getDiscountByCodeService(code);
+
+    return res.status(200).json({
+      success: true,
+      percentage,
+    });
+
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};

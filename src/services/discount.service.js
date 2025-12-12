@@ -31,3 +31,20 @@ export const deleteDiscountById = async (id) => {
   if (!discount) throw new Error("Discount not found");
   return discount;
 };
+
+
+
+
+export const getDiscountByCodeService = async (code) => {
+  const cleanedCode = code.trim(); // remove beginning and ending space
+console.log(cleanedCode,'service');
+  const discount = await Discount.findOne({
+    code: cleanedCode,
+  });
+
+  if (!discount) {
+    throw new Error("Invalid or expired discount code");
+  }
+
+  return discount.percentage; 
+};

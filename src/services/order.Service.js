@@ -31,7 +31,8 @@ export const createOrder = async (userId, orderData) => {
     tax,
     discount,
     shippingCost,
-    transactionId
+    transactionId,
+    orderid,
   } = orderData;
   console.log("Creating order for order:", orderData);
 
@@ -45,15 +46,18 @@ export const createOrder = async (userId, orderData) => {
   if (!carts.length) throw new Error("No selected cart items found");
 
   // 2️⃣ Fetch user details (fallback)
+  console.log("Fetching userId for order:", userId);
   let user = await User.findById(userId);
+  console.log("Fetched user for order:", user);
   if(!user && email){
     user = await User.findOne({ email });
+    console.log("User fetched by email for order:", user);
     if(user){
       userId= user._id;
     }
   }
 
-   else {
+  else if(!user && !email){
     const randomPassword = crypto.randomBytes(6).toString("hex");
     let createdUser = await User.create({
         email,
@@ -131,7 +135,8 @@ console.log(carts,"cartId")
     shippingCost,
     subtotal,
     total,
-
+    transactionId,
+    orderid,
     state: "processing",
     transactionId,
     carts: cartIds

@@ -18,6 +18,7 @@ export const updateUserProfile = async (req, res) => {
      if (req.file) {
   data.image = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
 }
+console.log(data,"data in controller")
     const updatedUser = await userService.updateUserProfile(userId, data);
     res.status(200).json({ success: true, data: updatedUser });
   } catch (err) {

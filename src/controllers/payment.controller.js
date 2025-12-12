@@ -10,7 +10,7 @@ import { createOrder } from "../services/order.Service.js";
 const generateOrderNumber = () => {
   const timestamp = Date.now();
   const random = Math.floor(Math.random() * 10000);
-  return `ORD-${timestamp}-${random}`;
+  return `#${timestamp}-${random}`;
 };
 
 const parsePaymentResponse = (responseString) => {
@@ -86,14 +86,15 @@ if(parsedResponse.transactionid !== 0) {
     shippingCost: totals.shipping,
     transactionId: parsedResponse.transactionid,
    
-    isNextUsePayment: false
+    isNextUsePayment: false,
+    orderid:parsedResponse.orderid,
     
   }
 await createOrder(req.body.userId,orderData)
 
 
 }
-    res.json({ success: true, response: data ,orderid:parsedResponse.orderid});
+    res.json({ success: true, response: data ,transactionid:parsedResponse.transactionid});
   } catch (err) {
     console.error("PAYMENT ERROR:", err);
     res.status(500).json({ success: false, error: err.message });
