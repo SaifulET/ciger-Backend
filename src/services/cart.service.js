@@ -80,7 +80,7 @@ export const unCheckCartService = async (cartIds, userId) => {
         _id: { $nin: cartIds },   // carts NOT in cartIds
       },
       {
-        $set: { isSelected: false },
+        $set: { isSelected :false },
       }
     );
 
