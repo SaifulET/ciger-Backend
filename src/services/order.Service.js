@@ -37,7 +37,7 @@ export const createOrder = async (userId, orderData) => {
   console.log("Creating order for order:", orderData);
 
   // 1️⃣ Fetch selected carts
-  const carts = await Cart.find({ userId, isSelected: true })
+  const carts = await Cart.find({ userId, isSelected: true ,isCheckedout:true})
     .populate({
       path: "productId",
       populate: { path: "brandId", model: "Brand" }

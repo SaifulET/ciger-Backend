@@ -7,6 +7,7 @@ export const createCart = async (data) => {
     userId: data.userId,
     productId: data.productId,
     isSelected:true,
+    isCheckedout:true
   });
 console.log(existing)
   if (existing) {
@@ -24,6 +25,23 @@ export const getUserCart = async (userId) => {
   return await Cart.find({ 
       userId,
       isSelected: true
+    })
+    .populate({
+      path: "productId",
+      select: "name price discount images isInStock brandId",
+      populate: {
+        path: "brandId",
+        select: "name image",
+      },
+    })
+    .sort({ createdAt: -1 });
+};
+
+export const getUserCartForPayment = async (userId) => {
+  return await Cart.find({ 
+      userId,
+      isSelected: true,
+      isCheckedout: true
     })
     .populate({
       path: "productId",
@@ -77,10 +95,19 @@ export const unCheckCartService = async (cartIds, userId) => {
     await Cart.updateMany(
       {
         userId,
+        _id: { $in: cartIds },   // carts NOT in cartIds
+      },
+      {
+        $set: { isCheckedout :true},
+      }
+    );
+    await Cart.updateMany(
+      {
+        userId,
         _id: { $nin: cartIds },   // carts NOT in cartIds
       },
       {
-        $set: { isSelected :false },
+        $set: { isCheckedout :false},
       }
     );
 
@@ -90,3 +117,38 @@ export const unCheckCartService = async (cartIds, userId) => {
     throw err;
   }
 };
+
+export const checkoutFalseService = async (userId) =>{
+try{
+  await Cart.updateMany(
+    { 
+      userId,
+      isSelected: true,
+      isOrdered: false,
+    },
+    {
+      $set: { isCheckedout :false},
+    }
+  );
+}catch(err){
+  console.log(err);
+  throw err;
+}
+}
+
+export const allCheckedOutCarts = async (userId) => {
+  try {
+    const carts = await Cart.updateMany({ 
+      userId,
+      isSelected: true,
+    },
+  {
+      $set: { isCheckedout :true},
+  });
+  console.log(carts,"service");
+    return carts;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } 
+}

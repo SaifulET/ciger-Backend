@@ -25,6 +25,19 @@ export const getUserCart = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+export const getUserCartForPayment = async (req, res) => {
+  try {
+    console.log("get user cart controller",req.params);
+    const { userId } = req.params;
+    console.log("userid")
+    
+    const cart = await cartService.getUserCartForPayment(userId);
+    console.log(cart,"payment cart")
+    res.status(200).json({ success: true, count: cart.length, data: cart });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 // ✅ Update cart item (quantity or selection)
 export const updateCart = async (req, res) => {
@@ -81,6 +94,55 @@ export const UnCheckedIdController = async (req, res) => {
     }
 
     const result = await cartService.unCheckCartService(cartIds, userId);
+
+    return res.status(200).json({
+      message: "Cart selection updated",
+      selectedCarts: result,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
+export const CheckoutFalseController = async (req, res) => {
+  try {
+    console.log(req.body)
+    const {  userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    const result = await cartService.checkoutFalseService( userId);
+
+    return res.status(200).json({
+      message: "Cart selection updated",
+      selectedCarts: result,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
+export const allCheckoutController = async (req, res) => {
+  try {
+    console.log(req.body)
+    const {  userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+
+    const result = await cartService.allCheckedOutCarts( userId);
 
     return res.status(200).json({
       message: "Cart selection updated",

@@ -7,6 +7,7 @@ const cartSchema = new mongoose.Schema({
   total: { type: Number, default: 0 }, // quantity * product.price
   isSelected: { type: Boolean, default: true },
   isOrdered: { type: Boolean, default: false },
+  isCheckedout: { type: Boolean, default:false  },
 }, { timestamps: true });
 
 export default mongoose.model("Cart", cartSchema);

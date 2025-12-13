@@ -69,7 +69,7 @@ console.log("payload", payload);
 
     const parsedResponse = parsePaymentResponse(data);
     console.log("Parsed Payment Response:", parsedResponse);
-if(parsedResponse.transactionid !== 0) {
+if(parsedResponse.transactionid ) {
   const orderData= {
     firstName: shippingInfo.firstName,
     lastName: shippingInfo.lastName,

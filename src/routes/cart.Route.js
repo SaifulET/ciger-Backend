@@ -5,7 +5,10 @@ import {
   updateCart,
   clearCart,
   deleteCartById,
-  UnCheckedIdController
+  UnCheckedIdController,
+  getUserCartForPayment,
+  CheckoutFalseController,
+  allCheckoutController
 } from "../controllers/cart.controller.js";
 import {authCheck} from "../middlewares/auth.middleware.js"
 
@@ -28,5 +31,12 @@ cartRoute.delete("/deleteCart/:id",deleteCartById);
 
 
 cartRoute.post("/checkedid",UnCheckedIdController)
+
+cartRoute.get("/getUserCartForPayment/:userId", getUserCartForPayment); 
+
+cartRoute.get("/CheckoutFalse/:userId",CheckoutFalseController);
+
+cartRoute.get("/allCheckout/:userId",allCheckoutController);
+
 
 export default cartRoute;
