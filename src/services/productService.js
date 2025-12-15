@@ -1,6 +1,7 @@
 import { da } from "zod/v4/locales";
 import Product from "../models/product.js";
 import brand from "../models/brand.js";
+import product from "../models/product.js";
 
 // Create a new product
 export const createProduct = async (data) => {
@@ -203,3 +204,6 @@ export const filterProductsService = async (keyword) => {
 
   return productsByBrand;
 };
+
+
+

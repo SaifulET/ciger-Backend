@@ -28,7 +28,7 @@ export const getUserCart = async (userId) => {
     })
     .populate({
       path: "productId",
-      select: "name price discount images isInStock brandId",
+      select: "name price discount images isInStock brandId available",
       populate: {
         path: "brandId",
         select: "name image",

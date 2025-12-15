@@ -10,6 +10,7 @@ export const processPaymentService = async ({ paymentToken, amount, currency }) 
 
   const response = await axios.post(process.env.ECRYPT_API_URL, paymentData);
 
+
   return response.data;
   
 };
