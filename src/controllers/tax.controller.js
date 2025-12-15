@@ -5,7 +5,7 @@ export const calculateTaxController = async (req, res) => {
     return res.status(405).json({ message: "Method not allowed" });
   }
 console.log("tax controller called",req.body);
-  const { amount,  to_zip, to_state, shipping,to_country } = req.body;
+  const { amount,  to_zip, to_state, shipping,to_country , to_city} = req.body;
 let from_zip=60203 ;
   if (!amount || !from_zip || !to_zip || !to_state) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -15,6 +15,7 @@ let from_zip=60203 ;
     const taxData = await calculateTaxService({
       amount,
       to_country,
+      to_city,
       to_zip,
       to_state,
       shipping,

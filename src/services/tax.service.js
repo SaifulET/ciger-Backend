@@ -1,7 +1,7 @@
 import Taxjar from "taxjar";
 
 export const calculateTaxService = async (payload) => {
-  const { amount, from_zip, to_zip, to_state, shipping = 0 } = payload;
+  const { amount, from_zip, to_zip, to_state, shipping = 0 ,to_city} = payload;
 
   const client = new Taxjar({
     apiKey: process.env.TAXJAR_API_KEY,
