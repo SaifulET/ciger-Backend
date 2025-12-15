@@ -24,7 +24,7 @@ export const calculateTaxService = async (payload) => {
       id: 'Main Location',
       country: 'US',
       zip: '28056',
-      state: 'CA',
+      state: 'NC',
       city: 'Gastonia',
       street: '3824 Quay Ct'
     }
