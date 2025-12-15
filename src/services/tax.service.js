@@ -9,10 +9,10 @@ export const calculateTaxService = async (payload) => {
 
   const tax = await client.taxForOrder({
   from_country: 'US',
-  from_zip: '92093',
-  from_state: 'CA',
-  from_city: 'La Jolla',
-  from_street: '9500 Gilman Drive',
+  from_zip: '28056',
+  from_state: 'NC',
+  from_city: 'Gastonia',
+  from_street: '3824 Quay Ct',
   to_country: 'US',
   to_zip,
   to_state,
@@ -23,10 +23,10 @@ export const calculateTaxService = async (payload) => {
     {
       id: 'Main Location',
       country: 'US',
-      zip: '92093',
+      zip: '28056',
       state: 'CA',
-      city: 'La Jolla',
-      street: '9500 Gilman Drive'
+      city: 'Gastonia',
+      street: '3824 Quay Ct'
     }
   ],
   
