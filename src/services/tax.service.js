@@ -8,26 +8,30 @@ export const calculateTaxService = async (payload) => {
   });
 
   const tax = await client.taxForOrder({
-    from_country: "US",
-    from_zip,
-    from_state: "IL", // your origin state
-    to_country: "US",
-    to_zip,
-    to_state,
-    amount,
-    shipping,
-    nexus_addresses: [
-      {
-        id: "Main Location",
-        country: "US",
-        zip: from_zip,
-        state: "IL",
-        city: "evanston",
-        street: "3350 Chruch St",
-      },
-    ],
-  });
-console.error("calculated tax:", tax);
+  from_country: 'US',
+  from_zip: '92093',
+  from_state: 'CA',
+  from_city: 'La Jolla',
+  from_street: '9500 Gilman Drive',
+  to_country: 'US',
+  to_zip,
+  to_state,
+  to_city,
+  amount,
+  shipping,
+  nexus_addresses: [
+    {
+      id: 'Main Location',
+      country: 'US',
+      zip: '92093',
+      state: 'CA',
+      city: 'La Jolla',
+      street: '9500 Gilman Drive'
+    }
+  ],
+  
+});
+console.log("calculated tax:", tax);
 console.log("calculated tax:", tax);
   return tax;
 };
