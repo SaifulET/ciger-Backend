@@ -1,7 +1,7 @@
 import Taxjar from "taxjar";
 
 export const calculateTaxService = async (payload) => {
-  const { amount, from_zip, to_zip, to_state, shipping = 0 ,to_city} = payload;
+  const { amount, from_zip, to_zip, to_state,to_street, shipping = 0 ,to_city} = payload;
 
   const client = new Taxjar({
     apiKey: process.env.TAXJAR_API_KEY,
@@ -9,10 +9,10 @@ export const calculateTaxService = async (payload) => {
 
   const tax = await client.taxForOrder({
   from_country: 'US',
-  from_zip: '28056',
-  from_state: 'NC',
-  from_city: 'Gastonia',
-  from_street: '3824 Quay Ct',
+  from_zip: to_zip,
+  from_state: to_state,
+  from_city: to_city,
+  
   to_country: 'US',
   to_zip,
   to_state,
@@ -23,10 +23,10 @@ export const calculateTaxService = async (payload) => {
     {
       id: 'Main Location',
       country: 'US',
-      zip: '28056',
-      state: 'NC',
-      city: 'Gastonia',
-      street: '3824 Quay Ct'
+      zip: to_zip,
+      state: to_state,
+      city: to_city,
+      street:to_street
     }
   ],
   
