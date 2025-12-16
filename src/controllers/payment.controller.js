@@ -40,7 +40,7 @@ export const processPaymentController = async (req, res) => {
 
 
  try {
-  console.log("req.body", req.body);
+  
 
     const {
      payment,
@@ -57,7 +57,7 @@ const orderNumber = generateOrderNumber();
       email: shippingInfo.email,
        orderid: orderNumber,
     };
-console.log("payload", payload);
+
     const form = new URLSearchParams(payload).toString();
     const ECRYPT_API_URL = "https://ecrypt.transactiongateway.com/api/transact.php";
 
@@ -65,10 +65,10 @@ console.log("payload", payload);
     const { data } = await axios.post(ECRYPT_API_URL, form, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
-    console.log("Payment Gateway Response:", data);
+    
 
     const parsedResponse = parsePaymentResponse(data);
-    console.log("Parsed Payment Response:", parsedResponse);
+   
 if(parsedResponse.transactionid ) {
   const orderData= {
     firstName: shippingInfo.firstName,

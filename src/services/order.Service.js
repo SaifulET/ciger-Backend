@@ -4,6 +4,7 @@ import { createNotification } from "./notification.service.js";
 import User from "../models/user.model.js";
 import { createBreakdown } from "./breakdownService.js";
 import crypto from "crypto";
+import Product from "../models/product.js";
 
 // 🧮 Helper: generate next orderId (#10000 -> #10001 -> ...)
 export const generateNextOrderId = async () => {
@@ -34,7 +35,7 @@ export const createOrder = async (userId, orderData) => {
     transactionId,
     orderid,
   } = orderData;
-  console.log("Creating order for order:", orderData);
+  
 
   // 1️⃣ Fetch selected carts
   const carts = await Cart.find({ userId, isSelected: true ,isCheckedout:true})
@@ -46,12 +47,12 @@ export const createOrder = async (userId, orderData) => {
   if (!carts.length) throw new Error("No selected cart items found");
 
   // 2️⃣ Fetch user details (fallback)
-  console.log("Fetching userId for order:", userId);
+  
   let user = await User.findById(userId);
-  console.log("Fetched user for order:", user);
+  
   if(!user && email){
     user = await User.findOne({ email });
-    console.log("User fetched by email for order:", user);
+    
     if(user){
       userId= user._id;
     }
@@ -66,10 +67,10 @@ export const createOrder = async (userId, orderData) => {
         lastName
     });
     user = createdUser;
-    console.log("Created new user for order:", createdUser);
+    
     userId = createdUser._id;
 }
-console.log("user details:", user);
+
 
   // 3️⃣ Build final address fields
   const finalFirst = firstName || user.firstName || "";
@@ -85,9 +86,14 @@ console.log("user details:", user);
 
   // 4️⃣ Calculate totals
   let subtotal = 0;
-console.log(carts,"cartId")
+
   for (const c of carts) {
+    console.log(c,"91");
     if(c.productId){
+      const product = await Product.findById(c.productId);
+      console.log(product.available,c.quantity,"product quantity");
+       product.available -= c.quantity;
+      await product.save();
       c.total = c.quantity * c.productId.price;
     c.isOrdered = true;
     await c.save();

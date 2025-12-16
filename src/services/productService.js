@@ -1,11 +1,11 @@
 import { da } from "zod/v4/locales";
 import Product from "../models/product.js";
 import brand from "../models/brand.js";
-import product from "../models/product.js";
+
 
 // Create a new product
 export const createProduct = async (data) => {
-  console.log(data,"7no line")
+  
 
 
  const normalize = (str) => str.replace(/\s+/g, "").toLowerCase();
@@ -17,7 +17,7 @@ console.log(inputNameNormalized,'13')
 
   // Check duplicate by normalization
   const duplicate = allProducts.find(p => normalize(p.name) === inputNameNormalized);
-console.log(duplicate,'19')
+
   if (duplicate) {
     return {
       success: false,
@@ -41,7 +41,7 @@ console.log(duplicate,'19')
 
   // Remove brand field since product schema does not use it
   delete data.brand;
-  console.log(data,"line23")
+  
 
   const product = new Product(data);
 
