@@ -66,7 +66,7 @@ const orderNumber = generateOrderNumber();
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
     
-
+console.log(data,'69')
     const parsedResponse = parsePaymentResponse(data);
    
 if(parsedResponse.transactionid ) {
