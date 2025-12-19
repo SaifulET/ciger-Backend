@@ -5,6 +5,7 @@ import crypto from "crypto";
 import SendEmail from "./email.service.js"; // implement email sending
 import { OAuth2Client } from "google-auth-library";
 import { JWT_EXPIRE_TIME, JWT_KEY } from "../config/token.config.js";
+import { SignupmailService } from "./signupmail.service.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Signup
@@ -41,7 +42,7 @@ console.log(data,"13")
     console.log(token);
 
     await user.save();
-
+    await SignupmailService({email});
     return { user, token };
   } catch (error) {
     if (error.code === 11000) {

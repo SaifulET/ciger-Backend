@@ -18,7 +18,9 @@ try {
     await transporter.sendMail({
       from: process.env.ZOHO_EMAIL, // Zoho email sends the message
       to: process.env.ZOHO_EMAIL,   // receive in your inbox
+      replyTo:email,
       subject: subject,
+
       text: `From: ${email}\n\n${message}` // include user email in body
     });
 

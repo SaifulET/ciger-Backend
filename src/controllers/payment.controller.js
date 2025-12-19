@@ -94,7 +94,7 @@ await createOrder(req.body.userId,orderData)
 
 
 }
-    res.json({ success: true, response: data ,transactionid:parsedResponse.transactionid});
+    res.json({ success: true, response: data ,transactionid:parsedResponse.transactionid,orderid:parsedResponse.orderid});
   } catch (err) {
     console.error("PAYMENT ERROR:", err);
     res.status(500).json({ success: false, error: err.message });
