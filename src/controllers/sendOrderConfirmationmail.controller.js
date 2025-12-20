@@ -1,4 +1,5 @@
 import { OrderConfirmationMailService } from "../services/orderMail.service.js";
+import { RefundConfirmationMailService } from "../services/signupmail.service.js";
 
 export const sendOrderConfirmationMail = async (req, res) => {
   try {
@@ -38,6 +39,45 @@ export const sendOrderConfirmationMail = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to send order confirmation email",
+      error: error.message,
+    });
+  }
+};
+
+
+
+
+
+
+export const sendRefundConfirmationMail = async (req, res) => {
+  try {
+    
+    const {
+      email,
+      orderId,
+      transactionId,
+      refundAmount,
+    } = req.body;
+
+    
+
+    await RefundConfirmationMailService({
+      email,
+      orderId,
+      transactionId,
+      refundAmount,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Refund confirmation email sent successfully",
+    });
+  } catch (error) {
+    console.error("Refund confirmation mail error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send refund confirmation email",
       error: error.message,
     });
   }
