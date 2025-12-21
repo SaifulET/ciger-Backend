@@ -154,7 +154,7 @@ const OrderId= newOrder._id
 // console.log(userId,"117")
 console.log("118",newOrder,"118")
 const UserId= newOrder.userId
-const data= {UserId,OrderId,status}
+const data= {UserId,orderid,status}
 createNotification(data);
 console.log(carts,"124")
 
@@ -220,7 +220,7 @@ export const getOrderById = async (id) => {
 
 // ✅ Update order (state, tracking number, etc.)
 export const updateOrderById = async (id, data) => {
-  console.log(data,'184')
+  console.log(id,data,'184')
   const allowedFields = [
     "trackingNo",
     "state",
@@ -246,7 +246,7 @@ console.log("197",updateData)
     .populate("userId", "firstName lastName email");
 
   if (!order) throw new Error("Order not found");
-  console.log(data.state,'209')
+  console.log(data,'209')
   const UserId= order.userId._id
   const OrderId=id;
   if(data.state){

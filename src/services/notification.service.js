@@ -28,8 +28,8 @@ const generateMessage = (status) => {
  */
 export const createNotification = async (data) => {
   console.log(data,'28')
-  const { UserId, OrderId, status } = data;
-
+  const { UserId, orderid, status } = data;
+console.log(data,'32')
   if (!UserId) throw new Error("UserId is required");
 
   // Fetch user name automatically
@@ -42,7 +42,7 @@ export const createNotification = async (data) => {
   const notification = await Notification.create({
     userId:UserId,
     userName,
-    orderId:OrderId,
+    orderId:orderid,
     status,
     message,
   });
@@ -57,7 +57,7 @@ export const getNotificationsByUser = async (userId) => {
   const notifications = await Notification.find({ userId })
     .sort({ createdAt: -1 })
     .limit(20);
-
+console.log(notifications,'60')
   return notifications.map(formatNotification);
 };
 
@@ -66,7 +66,7 @@ export const getAllNotifications = async () => {
   const notifications = await Notification.find()
     .sort({ createdAt: -1 })
     .limit(20);
-
+console.log(notifications,"69")
   return notifications.map(formatNotification);
 };
 
@@ -76,6 +76,7 @@ const formatNotification = (n) => ({
   userId: n.userId,
   userName: n.userName,
   orderId: n.orderId,
+  orderid: n.orderid,
   status: n.status,
   message: n.message,
   timestamp: timeAgo(n.createdAt),

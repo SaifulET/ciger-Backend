@@ -1,5 +1,5 @@
 import { OrderConfirmationMailService } from "../services/orderMail.service.js";
-import { RefundConfirmationMailService } from "../services/signupmail.service.js";
+import { CancelMailService, receiveMailService, RefundConfirmationMailService, shippedMailService } from "../services/signupmail.service.js";
 
 export const sendOrderConfirmationMail = async (req, res) => {
   try {
@@ -56,16 +56,35 @@ export const sendRefundConfirmationMail = async (req, res) => {
       email,
       orderId,
       transactionId,
-      refundAmount,
+      Amount,
+      status,
     } = req.body;
-
-    
-
+    if(status=='refunded')
     await RefundConfirmationMailService({
       email,
       orderId,
       transactionId,
-      refundAmount,
+      Amount,
+    });
+    if(status=='cancelled')
+    await CancelMailService({
+      email,
+      orderId,
+      transactionId,
+      Amount,
+    });
+    if(status=="delivered"){
+await receiveMailService({
+      email,
+      orderId,
+      transactionId,
+    });
+    }
+    if(status=='shipped')
+    await shippedMailService({
+      email,
+      orderId,
+      transactionId,
     });
 
     return res.status(200).json({
