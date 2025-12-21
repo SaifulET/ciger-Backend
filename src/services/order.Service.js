@@ -154,7 +154,7 @@ const OrderId= newOrder._id
 // console.log(userId,"117")
 console.log("118",newOrder,"118")
 const UserId= newOrder.userId
-const data= {UserId,orderid,status}
+const data= {UserId,orderid,status,linkId:OrderId};
 createNotification(data);
 console.log(carts,"124")
 
@@ -214,6 +214,7 @@ export const getOrderById = async (id) => {
     .populate("userId", "firstName lastName email");
 
   if (!order) throw new Error("Order not found");
+  console.log(order,"217")
   return order;
 };
 
@@ -251,7 +252,7 @@ console.log("197",updateData)
   const OrderId=id;
   if(data.state){
     const status=data.state;
-    createNotification({OrderId,UserId,status});
+    createNotification({OrderId,UserId,status,linkId:id});
   }
 if(data.state=="refunded") {
   console.log("210",order.total)
@@ -268,20 +269,20 @@ if(data.state=="refunded") {
   return order;
 };
 
-
-
-
-
-
 // ✅ Get orders by user ID
 export const getOrdersByUser = async (userId) => {
-  return await Order.find({ userId })
-    .sort({ createdAt: -1 })
+ const orders = await Order.find({ userId })
     .populate({
-      path: "carts",
-      populate: {
-        path: "productId",
-        populate: { path: "brandId", model: "Brand" }
-      }
-    });
+  path: "carts",
+  populate: {
+    path: "productId",
+    populate: {
+      path: "brandId",
+      model: "Brand"
+    }
+  }
+})
+
+    .lean(); // optional but recommended
+  return orders;
 };

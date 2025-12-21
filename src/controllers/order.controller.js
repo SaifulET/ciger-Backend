@@ -64,7 +64,6 @@ console.log(userId)
     }
 
     const orders = await orderService.getOrdersByUser(userId);
-    console.log(orders)
     res.status(200).json({
       success: true,
       data: orders,

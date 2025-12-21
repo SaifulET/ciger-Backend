@@ -28,7 +28,7 @@ const generateMessage = (status) => {
  */
 export const createNotification = async (data) => {
   console.log(data,'28')
-  const { UserId, orderid, status } = data;
+  const { UserId, orderid, status,linkId } = data;
 console.log(data,'32')
   if (!UserId) throw new Error("UserId is required");
 
@@ -44,6 +44,7 @@ console.log(data,'32')
     userName,
     orderId:orderid,
     status,
+    linkId,
     message,
   });
 
@@ -77,6 +78,7 @@ const formatNotification = (n) => ({
   userName: n.userName,
   orderId: n.orderId,
   orderid: n.orderid,
+  linkId:n.linkId,
   status: n.status,
   message: n.message,
   timestamp: timeAgo(n.createdAt),
