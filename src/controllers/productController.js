@@ -113,3 +113,26 @@ export const filterProductsController = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+export const getRelatedProductsController = async (req, res) => {
+  try {
+    const { productId } = req.params;
+console.log(productId)
+    const products = await productService.getRelatedProductsService(productId);
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+

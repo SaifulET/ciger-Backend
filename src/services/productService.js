@@ -207,3 +207,51 @@ export const filterProductsService = async (keyword) => {
 
 
 
+
+
+import mongoose from "mongoose";
+
+
+export const getRelatedProductsService = async (productId) => {
+  const product = await Product.findById(productId).lean();
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  const relatedProducts = await Product.aggregate([
+    {
+      $match: {
+        _id: { $ne: new mongoose.Types.ObjectId(productId) },
+        available: { $gt: 0 },      // ✅ available only
+        category: product.category,
+      },
+    },
+    {
+      $addFields: {
+        priority: {
+          $cond: [
+            { $eq: ["$subCategory", product.subCategory] },
+            1, // higher priority
+            2, // lower priority
+          ],
+        },
+      },
+    },
+    {
+      $sort: { priority: 1, _id: -1 }, // subcategory first
+    },
+    {
+      $limit: 10,
+    },
+    {
+      $project: {
+        priority: 0,
+      },
+    },
+  ]);
+
+  return relatedProducts;
+};
+
+
