@@ -25,6 +25,7 @@ export const RefundConfirmationMailService = async ({
   orderId,
   transactionId,
   Amount,
+  trackingNo
 }) => {
 
   const transporter = nodemailer.createTransport({
@@ -60,6 +61,10 @@ export const RefundConfirmationMailService = async ({
           <td style="padding: 6px 0;"><strong>Transaction ID:</strong></td>
           <td style="padding: 6px 12px;">${transactionId}</td>
         </tr>
+        <tr>
+          <td style="padding: 6px 0;"><strong>Tracking ID:</strong></td>
+          <td style="padding: 6px 12px;">${trackingNo}</td>
+        </tr>
        
         <tr>
           <td style="padding: 6px 0;"><strong>Refund Amount:</strong></td>
@@ -83,7 +88,7 @@ export const CancelMailService = async ({
   email,
   orderId,
   transactionId,
-  Amount,
+  Amount,trackingNo
 }) => {
   console.log(transactionId,Amount,"35")
   const transporter = nodemailer.createTransport({
@@ -126,6 +131,10 @@ html: `
       <td style="padding: 6px 0;"><strong>Transaction ID:</strong></td>
       <td style="padding: 6px 12px;">${transactionId}</td>
     </tr>
+     <tr>
+          <td style="padding: 6px 0;"><strong>Tracking ID:</strong></td>
+          <td style="padding: 6px 12px;">${trackingNo}</td>
+        </tr>
     <tr>
       <td style="padding: 6px 0;"><strong>Refund Amount:</strong></td>
       <td style="padding: 6px 12px;">$${Amount.toFixed(2)}</td>
@@ -153,7 +162,7 @@ html: `
 export const receiveMailService = async ({
   email,
   orderId,
-  transactionId,
+  transactionId,trackingNo
 }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.zoho.com",
@@ -195,6 +204,10 @@ export const receiveMailService = async ({
       <td style="padding: 6px 0;"><strong>Transaction ID:</strong></td>
       <td style="padding: 6px 12px;">${transactionId}</td>
     </tr>
+     <tr>
+          <td style="padding: 6px 0;"><strong>Tracking ID:</strong></td>
+          <td style="padding: 6px 12px;">${trackingNo}</td>
+        </tr>
   </table>
 
   <p>
@@ -218,7 +231,7 @@ export const receiveMailService = async ({
 export const shippedMailService = async ({
   email,
   orderId,
-  transactionId,
+  transactionId,trackingNo
 }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.zoho.com",
@@ -259,6 +272,10 @@ export const shippedMailService = async ({
       <td style="padding: 6px 0;"><strong>Transaction ID:</strong></td>
       <td style="padding: 6px 12px;">${transactionId}</td>
     </tr>
+     <tr>
+          <td style="padding: 6px 0;"><strong>Tracking ID:</strong></td>
+          <td style="padding: 6px 12px;">${trackingNo}</td>
+        </tr>
   </table>
 
   <p>
@@ -284,3 +301,74 @@ export const shippedMailService = async ({
 ,
   });
 };
+export const trackingNumber= async({ email,
+  orderId,
+  transactionId,trackingNo,Status})=>{
+
+      const transporter = nodemailer.createTransport({
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.ZOHO_EMAIL.trim(),
+      pass: process.env.ZOHO_APP_PASSWORDS.trim(),
+    },
+    authMethod: "LOGIN",
+  });
+
+  await transporter.verify();
+return transporter.sendMail({
+    from: process.env.ZOHO_EMAIL,
+    to: email,
+    subject: "Tracking Number Added for Your Order – Smokenza",
+   html: `
+  <p>Hello,</p>
+
+<p>
+  We’re happy to let you know that a <strong>tracking number has been added</strong>
+  to your order. Your package is now on its way!
+</p>
+
+<table style="border-collapse: collapse; margin-top: 12px;">
+  <tr>
+    <td style="padding: 6px 0;"><strong>Order ID:</strong></td>
+    <td style="padding: 6px 12px;">${orderId}</td>
+  </tr>
+  <tr>
+    <td style="padding: 6px 0;"><strong>Transaction ID:</strong></td>
+    <td style="padding: 6px 12px;">${transactionId}</td>
+  </tr>
+  <tr>
+    <td style="padding: 6px 0;"><strong>Tracking Number:</strong></td>
+    <td style="padding: 6px 12px;">${trackingNo}</td>
+  </tr>
+  <tr>
+    <td style="padding: 6px 0;"><strong>Order Status:</strong></td>
+    <td style="padding: 6px 12px;">${Status}</td>
+  </tr>
+</table>
+
+<p style="margin-top: 12px;">
+  You can use the tracking number above to follow your shipment with the courier.
+</p>
+
+<p>
+  If you have any questions or need assistance, feel free to contact our support team.
+</p>
+
+<p>
+  Thank you for shopping with <strong>Smokenza</strong>!
+</p>
+
+<p>
+  Best regards,<br />
+  <strong>Smokenza Team</strong>
+</p>
+
+`
+,
+  });
+
+
+}
+

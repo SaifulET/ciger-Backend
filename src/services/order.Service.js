@@ -88,7 +88,6 @@ export const createOrder = async (userId, orderData) => {
   let subtotal = 0;
 
   for (const c of carts) {
-    console.log(c,"91");
     if(c.productId){
       const product = await Product.findById(c.productId);
       console.log(product.available,c.quantity,"product quantity");
@@ -152,11 +151,9 @@ export const createOrder = async (userId, orderData) => {
 const status="processing";
 const OrderId= newOrder._id
 // console.log(userId,"117")
-console.log("118",newOrder,"118")
 const UserId= newOrder.userId
 const data= {UserId,orderid,status,linkId:OrderId};
 createNotification(data);
-console.log(carts,"124")
 
  for (const c of carts) {
     if(c.productId){
@@ -235,7 +232,6 @@ export const updateOrderById = async (id, data) => {
   allowedFields.forEach(field => {
     if (data[field] !== undefined) updateData[field] = data[field];
   });
-console.log("197",updateData)
   const order = await Order.findByIdAndUpdate(id, updateData, { new: true })
     .populate({
       path: "carts",
@@ -247,7 +243,6 @@ console.log("197",updateData)
     .populate("userId", "firstName lastName email");
 
   if (!order) throw new Error("Order not found");
-  console.log(data,'209')
   const UserId= order.userId._id
   const OrderId=id;
   if(data.state){
@@ -255,11 +250,9 @@ console.log("197",updateData)
     createNotification({OrderId,UserId,status,linkId:id});
   }
 if(data.state=="refunded") {
-  console.log("210",order.total)
 
       let amount = order.total;
       let category= "refund";
-      console.log(amount,category);
       const temp = await createBreakdown({category, amount});
    
     

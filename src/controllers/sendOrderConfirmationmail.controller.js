@@ -1,10 +1,17 @@
+import Order from "../models/order.js";
 import { OrderConfirmationMailService } from "../services/orderMail.service.js";
-import { CancelMailService, receiveMailService, RefundConfirmationMailService, shippedMailService } from "../services/signupmail.service.js";
+import {
+  CancelMailService,
+  receiveMailService,
+  RefundConfirmationMailService,
+  shippedMailService,
+  trackingNumber,
+} from "../services/signupmail.service.js";
 
 export const sendOrderConfirmationMail = async (req, res) => {
   try {
     const { email, orderId, transactionId, totalAmount } = req.body;
-    console.log(req.body)
+    console.log(req.body);
 
     // Basic validation
     if (!email || !orderId || !totalAmount) {
@@ -44,59 +51,89 @@ export const sendOrderConfirmationMail = async (req, res) => {
   }
 };
 
-
-
-
-
-
 export const sendRefundConfirmationMail = async (req, res) => {
   try {
-    
-    const {
-      email,
-      orderId,
-      transactionId,
-      Amount,
-      status,
-    } = req.body;
-    if(status=='refunded')
-    await RefundConfirmationMailService({
-      email,
-      orderId,
-      transactionId,
-      Amount,
-    });
-    if(status=='cancelled')
-    await CancelMailService({
-      email,
-      orderId,
-      transactionId,
-      Amount,
-    });
-    if(status=="delivered"){
-await receiveMailService({
-      email,
-      orderId,
-      transactionId,
-    });
+    const { email, orderId, transactionId, Amount, status } = req.body;
+
+    const order = await Order.findOne(
+      { orderid: orderId },
+      { trackingNo: 1, _id: 0 }
+    ).lean();
+
+    const trackingNo = order?.trackingNo || 0;
+    if (status == "refunded")
+      await RefundConfirmationMailService({
+        email,
+        orderId,
+        transactionId,
+        Amount,
+        trackingNo,
+      });
+    if (status == "cancelled")
+      await CancelMailService({
+        email,
+        orderId,
+        transactionId,
+        Amount,
+        trackingNo,
+      });
+    if (status == "delivered") {
+      await receiveMailService({
+        email,
+        orderId,
+        transactionId,
+        trackingNo,
+      });
     }
-    if(status=='shipped')
-    await shippedMailService({
-      email,
-      orderId,
-      transactionId,
-    });
+    if (status == "shipped")
+      await shippedMailService({
+        email,
+        orderId,
+        transactionId,
+        trackingNo,
+      });
 
     return res.status(200).json({
       success: true,
       message: "Refund confirmation email sent successfully",
     });
   } catch (error) {
-    console.error("Refund confirmation mail error:", error);
-
     return res.status(500).json({
       success: false,
       message: "Failed to send refund confirmation email",
+      error: error.message,
+    });
+  }
+};
+export const trackingNumberController = async (req, res) => {
+  try {
+    const { orderId, trackingNo } = req.body;
+    console.log(req.body, "reqbody");
+    const order = await Order.findOne(
+      { _id: orderId },
+      { transactionId: 1, orderid: 1, state: 1, email: 1, _id: 0 }
+    ).lean();
+    const transactionId = order?.transactionId || 0;
+    const Status = order?.state || "processing";
+    const email = order?.email || "";
+    const orderid = order?.orderid || "";
+    console.log(order, "130");
+
+    await trackingNumber({
+      email,
+      orderId: orderid,
+      transactionId,
+      trackingNo,
+      Status,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Tracking number sent successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send tracking number email",
       error: error.message,
     });
   }
