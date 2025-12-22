@@ -46,7 +46,7 @@ export const OrderConfirmationMailService = async ({
         </tr>
         <tr>
           <td style="padding: 6px 0;"><strong>Total Amount:</strong></td>
-          <td style="padding: 6px 12px;">$${totalAmount}</td>
+          <td style="padding: 6px 12px;">$${totalAmount.toFixed(2)}</td>
         </tr>
       </table>
 
