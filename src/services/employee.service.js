@@ -97,7 +97,7 @@ export const SetEmployeePassword = async (email, password, confirmPassword,first
 
 
 export const allEmployee = async () => {
-  const employees = await Admin.find({})
+  const employees = await Admin.find({approval:true})
     .select("-password -otp -otpExpires") 
     .sort({ createdAt: -1 })              
     .lean();
