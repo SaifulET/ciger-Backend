@@ -101,12 +101,16 @@ export const forgotPassword = async (email) => {
   await user.save();
 
   // Send OTP to email
-  console.log(email);
-  await SendEmail(
-    email,
-    `The Otp is ${otp}. And it valid for 5 mins `,
-    `Your OTP is ${otp}`
-  );
+ await SendEmail(
+  email,
+  `OTP: ${otp}
+
+Use this code to verify your account.
+Valid for 5 minutes only.
+
+Do not share this code.`,
+  `🔐 ${otp} is your verification code`
+);
 
   return { message: "OTP sent to email" };
 };

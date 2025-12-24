@@ -61,6 +61,7 @@ export const signin = async (email, password) => {
   const admin = await Admin.findOne({ email });
 
   if (!admin) throw new Error("User not found");
+  if(!admin.approval) throw new Error("Invoked you approval")
   if(admin.isSignin) throw new Error("Already Logedin")
 
   const isMatch = await bcrypt.compare(password, admin.password);

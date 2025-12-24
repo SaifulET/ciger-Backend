@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phone: { type: String },
   image: { type: String },
-
-  password: { type: String, required: true },
+  approval:{type:Boolean,default:false},
+  password: { type: String},
   isSignin: { type: Boolean, default: false },
   otp: { type: String },
   otpExpires: { type: Date },
