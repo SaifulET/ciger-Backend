@@ -2,6 +2,7 @@ import Review from "../models/review.js";
 
 // ✅ Create a review
 export const createReview = async (data) => {
+  console.log("dld",data,"dld")
   const review = new Review(data);
   return await review.save();
 };
@@ -12,7 +13,7 @@ export const createReview = async (data) => {
 export const getAllReviews = async (filter = {}) => {
   // Fetch reviews with populated product and user
   const reviews = await Review.find(filter)
-    .populate("userId", "name email location")
+    .populate("userId", "firstName lastName email location image")
     .populate("productId", "name title") // populate product info
     .sort({ createdAt: -1 });
 

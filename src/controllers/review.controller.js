@@ -3,7 +3,9 @@ import * as reviewService from "../services/reviewService.js";
 // ✅ Create a new review
 export const createReview = async (req, res) => {
   try {
-    const review = await reviewService.createReview(req.body);
+    console.log(req.body)
+    
+    const review = await reviewService.createReview({productId:req.body.productId,review:req.body.text,rating:req.body.rating,userId:req.body.userId});
     res.status(201).json({ success: true, data: review });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
