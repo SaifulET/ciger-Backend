@@ -56,7 +56,9 @@ const orderNumber = generateOrderNumber();
       last_name: shippingInfo.lastName,
       email: shippingInfo.email,
        orderid: orderNumber,
+      
     };
+    console.log(payload)
 
     const form = new URLSearchParams(payload).toString();
     const ECRYPT_API_URL = "https://ecrypt.transactiongateway.com/api/transact.php";

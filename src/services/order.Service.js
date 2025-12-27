@@ -92,6 +92,9 @@ export const createOrder = async (userId, orderData) => {
       const product = await Product.findById(c.productId);
       console.log(product.available,c.quantity,"product quantity");
        product.available -= c.quantity;
+       if(product.available==0){
+        product.isInStock=false;
+       }
       await product.save();
       c.total = c.quantity * c.productId.price;
     c.isOrdered = true;
