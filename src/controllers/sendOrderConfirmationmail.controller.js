@@ -98,6 +98,7 @@ export const sendRefundConfirmationMail = async (req, res) => {
       message: "Refund confirmation email sent successfully",
     });
   } catch (error) {
+    console.log(error,'abc')
     return res.status(500).json({
       success: false,
       message: "Failed to send refund confirmation email",
@@ -117,7 +118,6 @@ export const trackingNumberController = async (req, res) => {
     const Status = order?.state || "processing";
     const email = order?.email || "";
     const orderid = order?.orderid || "";
-    console.log(order, "130");
 
     await trackingNumber({
       email,

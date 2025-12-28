@@ -27,14 +27,29 @@ export const RefundConfirmationMailService = async ({
   Amount,
   trackingNo
 }) => {
+  console.log(Amount)
+  // Add validation to ensure Amount exists and is a number
+  if (Amount === undefined || Amount === null) {
+   
+  }
 
+  // Convert Amount to number and handle potential string values
+  const amountNum = Number(Amount);
+  
+  // Validate that Amount is a valid number
+  if (isNaN(amountNum)) {
+  }
+
+  // Use toFixed(2) to ensure 2 decimal places for currency
+  const dollar = amountNum.toFixed(2);
+  
   const transporter = nodemailer.createTransport({
     host: "smtp.zoho.com",
     port: 465,
     secure: true,
     auth: {
-      user: process.env.ZOHO_EMAIL.trim(),
-      pass: process.env.ZOHO_APP_PASSWORDS.trim(),
+      user: process.env.ZOHO_EMAIL?.trim(),
+      pass: process.env.ZOHO_APP_PASSWORDS?.trim(),
     },
     authMethod: "LOGIN",
   });
@@ -55,20 +70,20 @@ export const RefundConfirmationMailService = async ({
       <table style="border-collapse: collapse;">
         <tr>
           <td style="padding: 6px 0;"><strong>Order ID:</strong></td>
-          <td style="padding: 6px 12px;">${orderId}</td>
+          <td style="padding: 6px 12px;">${orderId || 'N/A'}</td>
         </tr>
         <tr>
           <td style="padding: 6px 0;"><strong>Transaction ID:</strong></td>
-          <td style="padding: 6px 12px;">${transactionId}</td>
+          <td style="padding: 6px 12px;">${transactionId || 'N/A'}</td>
         </tr>
         <tr>
           <td style="padding: 6px 0;"><strong>Tracking ID:</strong></td>
-          <td style="padding: 6px 12px;">${trackingNo}</td>
+          <td style="padding: 6px 12px;">${trackingNo || 'N/A'}</td>
         </tr>
        
         <tr>
           <td style="padding: 6px 0;"><strong>Refund Amount:</strong></td>
-          <td style="padding: 6px 12px;">$${Amount.toFixed(2)}</td>
+          <td style="padding: 6px 12px;">$${dollar}</td>
         </tr>
       </table>
 
