@@ -18,6 +18,7 @@ export const generateNextOrderId = async () => {
 // ✅ Create Order
 export const createOrder = async (userId, orderData) => {
   const {
+
     firstName,
     lastName,
     country,
@@ -27,6 +28,7 @@ export const createOrder = async (userId, orderData) => {
     apartment,
     phone,
     email,
+        address,
     trackingNo,
     isNextUsePayment,
     tax,
@@ -36,7 +38,7 @@ export const createOrder = async (userId, orderData) => {
     orderid,
   } = orderData;
   
-
+console.log(address,'41')
   // 1️⃣ Fetch selected carts
   const carts = await Cart.find({ userId, isSelected: true ,isCheckedout:true})
     .populate({
@@ -81,9 +83,10 @@ export const createOrder = async (userId, orderData) => {
   const finalZip = zipCode || user.zipCode || "";
   const finalApartment = apartment || user.apartment || "";
 
-  const fullName = `${finalFirst} ${finalLast}`.trim(); // ✅ name = firstName + lastName
-  const formattedAddress = `${finalApartment ? finalApartment + ", " : ""}${finalCity}, ${finalState}, ${finalCountry} - ${finalZip}`;
 
+  const fullName = `${finalFirst} ${finalLast}`.trim(); // ✅ name = firstName + lastName
+  const formattedAddress = `${finalApartment ? finalApartment + ", " : ""}${finalCity}, ${finalState}, ${finalCountry} - ${finalZip} , ${address}`;
+console.log(formattedAddress,"address")
   // 4️⃣ Calculate totals
   let subtotal = 0;
 
