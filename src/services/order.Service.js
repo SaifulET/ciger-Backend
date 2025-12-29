@@ -85,7 +85,8 @@ console.log(address,'41')
 
 
   const fullName = `${finalFirst} ${finalLast}`.trim(); // ✅ name = firstName + lastName
-  const formattedAddress = `${finalApartment ? finalApartment + ", " : ""}${finalCity}, ${finalState}, ${finalCountry} - ${finalZip} , ${address}`;
+  const formattedAddress = `${address}${finalApartment ? ", " + finalApartment : ""}, ${finalCity}, ${finalState} ${finalZip}, ${finalCountry}
+`;
 console.log(formattedAddress,"address")
   // 4️⃣ Calculate totals
   let subtotal = 0;
