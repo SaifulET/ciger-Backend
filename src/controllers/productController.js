@@ -134,5 +134,57 @@ console.log(productId)
   }
 };
 
+export const getDiscountedProductsController = async (req, res) => {
+  try {
+    const filters = {
+      
+      discount: req.query.discount,
+      // isBest: req.query.best,
+      // isNew: req.query.new 
+    };
+    
+    const products = await productService.getDiscountedProducts();
+  
+    res.status(200).json({ success: true, count: products.length, data: products });
+  } catch (err) { 
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+export const getNewProductsController = async (req, res) => {
+  try {
+    const filters = {
+      
+      // discount: req.query.discount,
+      // isBest: req.query.best,
+      isNew: req.query.new 
+    };
+    
+    const products = await productService.getNewProducts();
+  
+    res.status(200).json({ success: true, count: products.length, data: products });
+  } catch (err) { 
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+export const getBestProductsController = async (req, res) => {
+  try {
+    const filters = {
+      
+      // discount: req.query.discount,
+      isBest: req.query.best,
+      // isNew: req.query.new 
+    };
+    
+    const products = await productService.getBestProducts();
+  
+    res.status(200).json({ success: true, count: products.length, data: products });
+  } catch (err) { 
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+
+
 
 

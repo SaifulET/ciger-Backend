@@ -2,6 +2,10 @@ import express from "express";
 import { signup, signin, forgotPassword, resetPassword, signout, verifyOtpController, getAdminProfile, updateAdminProfile,  } from "../controllers/admin.controller.js";
 import { authChecks } from "../middlewares/authForAdmin.middleware.js";
 import { SingleuploadMiddleware } from "../middlewares/awsUpload.middleware.js";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
 const adminRoutes = express.Router();
 
 
