@@ -6,7 +6,10 @@ import {
   updateProduct,
   deleteProduct,
   filterProductsController,
-  getRelatedProductsController
+  getRelatedProductsController,
+  getDiscountedProductsController,
+  getNewProductsController,
+  getBestProductsController
 } from "../controllers/productController.js";
 import { uploadMiddleware } from "../middlewares/awsUpload.middleware.js";
 
@@ -17,6 +20,11 @@ ProuductRouter.post("/createProduct",uploadMiddleware.array("images", 10), creat
 
 // Get all products
 ProuductRouter.get("/getAllProduct", getProducts);
+
+
+ProuductRouter.get("/getDiscountedProduct", getDiscountedProductsController);
+ProuductRouter.get("/getNewProduct", getNewProductsController);
+ProuductRouter.get("/getBestProduct", getBestProductsController);
 
 // Get single product
 ProuductRouter.get("/getProductById/:id", getProductById);
@@ -32,5 +40,8 @@ ProuductRouter.get("/filter/:keyword", filterProductsController);
 
 
 ProuductRouter.get("/getRelatedProduct/:productId", getRelatedProductsController);
+
+
+
 
 export default ProuductRouter;

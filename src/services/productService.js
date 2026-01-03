@@ -162,6 +162,34 @@ export const getAllProducts = async (filters = {}) => {
 
   return filteredProducts;
 };
+export const getDiscountedProducts = async () => {
+  const allProducts = await Product.find({
+    discount: { $gt: 0 }
+  })
+    .populate("brandId")
+    .sort({ createdAt: -1 })
+    .limit(12);
+
+  return allProducts;
+};
+
+
+export const getNewProducts = async () => {
+  let allProducts = await Product.find({isNew:true})
+    .populate("brandId")
+    .sort({ createdAt: -1 });
+
+
+  return allProducts
+};
+export const getBestProducts = async () => {
+  let allProducts = await Product.find({isBest:true})
+    .populate("brandId")
+    .sort({ createdAt: -1 });
+
+
+  return allProducts
+};
 
 
 
